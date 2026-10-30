@@ -1,5 +1,6 @@
 import { getHostLanguage, getHostNetwork, init, NimiqProviderError } from '@nimiq/mini-app-sdk'
-import { API } from './api'
+import { call, DEMO } from './api'
+import { demoEngine } from './demo'
 
 export interface Wallet {
   mode: 'nimiqpay' | 'preview'
@@ -17,7 +18,10 @@ function isCancel(e: unknown) {
   return /denied|reject|cancel/i.test(String((e as Error)?.message ?? e))
 }
 
-/** Connect to Nimiq Pay. Outside Nimiq Pay, fall back to the testnet preview wallet if the server offers one. */
+/**
+ * Connect to Nimiq Pay. Outside Nimiq Pay, fall back to the testnet preview wallet if the server offers one
+ * (in demo mode that wallet's key is generated and kept in this browser).
+ */
 export async function connectWallet(): Promise<Wallet | null> {
   try {
     const nimiq = await init({ timeout: 6000 })
@@ -33,16 +37,18 @@ export async function connectWallet(): Promise<Wallet | null> {
     }
   }
   catch {
-    const r = await fetch(`${API}/api/dev/wallet`).catch(() => null)
+    // Demo mode: wait until the page-local testnet wallet has test NIM (faucet, or the demo treasury).
+    if (DEMO) await await (await demoEngine()).fundWallet().catch(() => {})
+    const r = await call('/api/dev/wallet').catch(() => null)
     if (!r?.ok) return null
     return {
       mode: 'preview',
       network: 'testnet',
-      listAccounts: async () => [(await (await fetch(`${API}/api/dev/wallet`)).json()).address],
-      getBalance: async () => (await (await fetch(`${API}/api/dev/wallet`)).json()).balance,
+      listAccounts: async () => [(await (await call('/api/dev/wallet')).json()).address],
+      getBalance: async () => (await (await call('/api/dev/wallet')).json()).balance,
       async send(tx) {
         if (!window.confirm(`Preview wallet (testnet)\n\nSend ${tx.value / 1e5} NIM to\n${tx.recipient}\nMemo: ${tx.data}`)) throw new UserCancelled('cancelled')
-        const r = await fetch(`${API}/api/dev/send`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(tx) })
+        const r = await call('/api/dev/send', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(tx) })
         if (!r.ok) throw new Error('Preview wallet could not send')
         return (await r.json()).hash
       },

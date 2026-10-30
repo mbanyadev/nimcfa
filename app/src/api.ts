@@ -1,3 +1,5 @@
+import { demoEngine } from './demo'
+
 /**
  * Server base URL. Build-time VITE_API_URL, optionally overridden at runtime with ?api=https://... (remembered),
  * so the same static build can point at a different NimCFA server without a rebuild.
@@ -8,13 +10,25 @@ function resolveApi(): string {
     const q = new URLSearchParams(window.location.search).get('api')
     if (q !== null) {
       if (q === '' || q === 'default') localStorage.removeItem('nimcfa.api')
-      else if (/^https?:\/\//.test(q)) localStorage.setItem('nimcfa.api', q)
+      else if (q === 'demo' || /^https?:\/\//.test(q)) localStorage.setItem('nimcfa.api', q)
     }
     return (localStorage.getItem('nimcfa.api') ?? fromBuild).replace(/\/$/, '')
   }
   catch { return fromBuild.replace(/\/$/, '') }
 }
 export const API = resolveApi()
+
+/**
+ * Demo mode: a production build with no server configured (the hosted GitHub Pages demo), or ?api=demo.
+ * The order engine then runs in this page on testnet (see demo.ts). `npm run dev` keeps using the local server.
+ */
+export const DEMO = API === 'demo' || (API === '' && import.meta.env.PROD)
+
+/** fetch() against the NimCFA API: the configured server, or the in-page engine in demo mode. */
+export async function call(path: string, init?: RequestInit): Promise<Response> {
+  if (DEMO) return (await demoEngine()).fetch(path, init)
+  return fetch(`${API}${path}`, init)
+}
 
 export interface TimelineEvent { at: number, label: string, ref?: string }
 export interface Order {
@@ -54,7 +68,7 @@ export interface Health {
 }
 
 async function req<T>(path: string, body?: unknown): Promise<T> {
-  const r = await fetch(`${API}${path}`, body === undefined ? undefined : {
+  const r = await call(path, body === undefined ? undefined : {
     method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body),
   })
   const j = await r.json().catch(() => ({ error: `Server error (${r.status})` }))

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { api, type Health, type Order, type Quote } from './api'
+import { api, DEMO, type Health, type Order, type Quote } from './api'
 import { dicts, fmtNim, fmtXaf, type Dict } from './i18n'
 import { formatPhone, normalize, operatorOf } from './phone'
 import { connectWallet, hostLanguage, UserCancelled, type Wallet } from './wallet'
@@ -54,6 +54,7 @@ export default function App() {
       </header>
 
       {health?.sandbox && <div className="banner">{t.sandbox}{health.network === 'testnet' ? ` · ${t.testnet}` : ''}</div>}
+      {DEMO && <div className="banner subtle">{t.demo}</div>}
       {wallet?.mode === 'preview' && <div className="banner subtle">{t.previewWallet}</div>}
       {networkMismatch && <div className="banner warn">Nimiq Pay is on {wallet!.network}, this service runs on {health!.network}.</div>}
 

@@ -8,10 +8,11 @@ A Nimiq Pay mini app for Cameroon (CEMAC). You can **cash out NIM to MTN MoMo or
 
 ## Try it
 
-* **Mini app (GitHub Pages):** https://mbanyadev.github.io/nimcfa/ (open it in Nimiq Pay → Mini Apps → Custom URL, on testnet).
+* **Mini app (GitHub Pages):** https://mbanyadev.github.io/nimcfa/ (open it in Nimiq Pay → Mini Apps → Custom URL, on testnet, or in any desktop browser).
+* **The hosted demo runs the payout engine in your browser on testnet; production runs `server/`.** GitHub Pages cannot run a server, so the Pages build bundles the same order engine (`server/src/app.ts`, `orders.ts`, `pricing.ts`, the mobile money simulator) into the page through `server/src/main.browser.ts`. It checks deposits on the public Nimiq testnet RPC, pays out through the simulator, refunds and delivers NIM exactly as the server does, and keeps your orders in this browser's storage. Its escrow is a **public, testnet-only demo key** that ships in the page (`app/src/demo.ts`) and holds only free faucet NIM. A real deployment never does this: the escrow key stays in the server environment and the app is built with `VITE_API_URL`.
 * **Demo video (2:31):** [docs/video/nimcfa-demo.mp4](docs/video/nimcfa-demo.mp4), recorded headless from the live Pages build on testnet (`docs/video/record.mjs` + `build.py`).
-* In a desktop browser the app falls back to a testnet preview wallet held by the server, so you can click through cash-out, top-up and refund without installing anything.
-* The app talks to the server set at build time (`VITE_API_URL`). To point the same build at another server, add `?api=https://your-server` to the URL once.
+* In a desktop browser the app falls back to a testnet preview wallet, so you can click through cash-out, top-up and refund without installing anything. On the hosted demo that wallet's key is generated in your browser and funded from the public testnet faucet (or, if the faucet is busy, with a small grant from the demo treasury). With a real server, the server holds it (`ENABLE_DEV_WALLET`).
+* To point the same build at a running NimCFA server, add `?api=https://your-server` to the URL once (`?api=default` goes back to the in-browser demo). A build made with `VITE_API_URL` uses that server by default.
 
 ## How it works
 
@@ -33,7 +34,7 @@ The **History** tab lists your past orders and their on-chain links.
 
 ```
 app/     Vite + React + @nimiq/mini-app-sdk (runs inside Nimiq Pay)
-server/  Hono order engine (runs on Node or Deno; Deno Deploy in production)
+server/  Hono order engine (runs on Node or Deno in production; main.browser.ts bundles it into the hosted demo)
   ├─ Nimiq: JSON-RPC (nimiqwatch) for chain reads/broadcast, @nimiq/core for signing
   ├─ pricing: CoinGecko NIM/EUR × 655.957 (fixed XAF/EUR peg), cached
   ├─ providers/: simulator | fapshi | campay (pluggable payout + collect)
@@ -63,7 +64,8 @@ cd app && npm run dev        # http://localhost:5173 (also on your LAN IP)
 
 ### Deploy
 
-* **App:** `VITE_API_URL=https://<server> ./scripts/deploy-pages.sh` builds `app/` and publishes it to the `gh-pages` branch (GitHub Pages).
+* **App:** `VITE_API_URL=https://<server> ./scripts/deploy-pages.sh` builds `app/` against your server and publishes it to the `gh-pages` branch (GitHub Pages). Without `VITE_API_URL` it publishes the in-browser testnet demo described above.
+* `node scripts/e2e-browser-demo.mjs` (needs `playwright-core` and Chrome; set `BASE` to the URL) clicks through a cash-out, a refunded cash-out and a top-up in a headless browser.
 * **Server (Deno Deploy, free plan):** `server/deno.json` holds the build config (`deno install`, entry point `src/main.deno.ts`, KV and cron enabled). In https://console.deno.com: sign in with GitHub, create an organization, then **New App** → this repo → app directory `server`. Under **Databases**, provision a Deno KV database and link it to the app. Add the environment variables `NIM_NETWORK=testnet`, `PAYOUT_PROVIDER=simulator`, `MIN_CONFIRMATIONS=2`, `ALLOWED_ORIGINS=*`, `ENABLE_DEV_WALLET=true` and the secrets `TREASURY_PRIVATE_KEY` and `DEV_WALLET_PRIVATE_KEY` (testnet keys). The app is served at `https://<app>.<org>.deno.net`. Run it the same way locally with `cd server && deno task start` (port 8000, local KV file).
 * **Server (any Docker host, e.g. Hugging Face Spaces):** `server/Dockerfile` runs the Node build on port 7860 with the file store. Set the same variables.
 * **Server (plain Node):** `npm start` in `server/` (file store in `./data`).
@@ -72,7 +74,7 @@ cd app && npm run dev        # http://localhost:5173 (also on your LAN IP)
 See `server/.env.example`. Key settings: `NIM_NETWORK` (testnet|mainnet), `TREASURY_PRIVATE_KEY`, `PAYOUT_PROVIDER` (simulator|fapshi|campay) and the matching provider credentials, `ALLOWED_ORIGINS`. **No secrets are committed.**
 
 ## Security notes
-* The escrow key lives only in the server environment. The app never sees a private key, and users approve every transaction in Nimiq Pay.
+* In production the escrow key lives only in the server environment. The app never sees a private key, and users approve every transaction in Nimiq Pay. (The hosted demo is the one exception, on testnet only: its escrow key is public by design, as explained under *Try it*.)
 * Phone numbers are masked in API responses.
 * A deposit is accepted only from the wallet that created the order and only with the matching memo, so nobody can claim someone else's transaction.
 * A payout is attempted at most once per order.
