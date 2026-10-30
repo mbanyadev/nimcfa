@@ -1,0 +1,61 @@
+const en = {
+  tagline: 'NIM ⇄ FCFA, straight to Mobile Money',
+  cashOut: 'Cash out', topUp: 'Top up', history: 'History',
+  receive: 'You receive', youPay: 'You pay', youSend: 'You send', youGet: 'You get',
+  phone: 'Mobile Money number', phoneHint: 'MTN MoMo or Orange Money, Cameroon',
+  rate: 'Rate', fee: 'Fee', lockedFor: 'Rate locked for 10 min',
+  review: 'Review', confirmSend: (nim: string) => `Send ${nim} NIM`, pay: 'Request payment',
+  back: 'Back', done: 'Done', newOrder: 'New transfer',
+  notInPay: 'Open NimCFA inside Nimiq Pay to connect your wallet.',
+  connecting: 'Connecting to Nimiq Pay…',
+  sandbox: 'Test mode: mobile money is simulated, no real francs move.',
+  testnet: 'Testnet',
+  previewWallet: 'Browser preview wallet (testnet)',
+  approveInPay: 'Approve the payment in Nimiq Pay',
+  approvePhone: (op: string): string => op === 'mtn' ? 'Approve the prompt on your phone, or dial *126#' : 'Approve the prompt on your phone, or dial #150*50#',
+  cancelled: 'Payment cancelled. Nothing was sent.',
+  invalidPhone: 'Enter a Cameroon MTN or Orange number',
+  amountRange: (min: number, max: number) => `Between ${fmtXaf(min)} and ${fmtXaf(max)}`,
+  noHistory: 'No transfers yet.',
+  balance: 'Balance',
+  status: {
+    awaiting_deposit: 'Waiting for your NIM', deposit_seen: 'NIM received', paying_out: 'Sending FCFA',
+    paid: 'Paid', payout_failed: 'Needs review', refunding: 'Refunding', refunded: 'Refunded', expired: 'Expired',
+    awaiting_payment: 'Waiting for your payment', paid_in: 'Payment received', sending_nim: 'Sending NIM',
+    delivered: 'NIM delivered', payment_failed: 'Payment failed',
+  } as Record<string, string>,
+  why: 'NimCFA locks your rate, holds your NIM safely, and refunds you automatically if the payout fails.',
+}
+type Dict = typeof en
+const fr: Dict = {
+  ...en,
+  tagline: 'NIM ⇄ FCFA, directement sur Mobile Money',
+  cashOut: 'Retirer', topUp: 'Recharger', history: 'Historique',
+  receive: 'Vous recevez', youPay: 'Vous payez', youSend: 'Vous envoyez', youGet: 'Vous obtenez',
+  phone: 'Numéro Mobile Money', phoneHint: 'MTN MoMo ou Orange Money, Cameroun',
+  rate: 'Taux', fee: 'Frais', lockedFor: 'Taux bloqué 10 min',
+  review: 'Vérifier', confirmSend: (nim: string) => `Envoyer ${nim} NIM`, pay: 'Demander le paiement',
+  back: 'Retour', done: 'Terminé', newOrder: 'Nouveau transfert',
+  notInPay: 'Ouvrez NimCFA dans Nimiq Pay pour connecter votre portefeuille.',
+  connecting: 'Connexion à Nimiq Pay…',
+  sandbox: 'Mode test : le Mobile Money est simulé, aucun franc réel ne circule.',
+  previewWallet: 'Portefeuille de test du navigateur (testnet)',
+  approveInPay: 'Validez le paiement dans Nimiq Pay',
+  approvePhone: (op: string) => op === 'mtn' ? 'Validez la demande sur votre téléphone, ou composez *126#' : 'Validez la demande sur votre téléphone, ou composez #150*50#',
+  cancelled: 'Paiement annulé. Rien n’a été envoyé.',
+  invalidPhone: 'Entrez un numéro MTN ou Orange du Cameroun',
+  amountRange: (min: number, max: number) => `Entre ${fmtXaf(min)} et ${fmtXaf(max)}`,
+  noHistory: 'Aucun transfert pour le moment.',
+  balance: 'Solde',
+  status: {
+    awaiting_deposit: 'En attente de vos NIM', deposit_seen: 'NIM reçus', paying_out: 'Envoi des FCFA',
+    paid: 'Payé', payout_failed: 'En vérification', refunding: 'Remboursement', refunded: 'Remboursé', expired: 'Expiré',
+    awaiting_payment: 'En attente de votre paiement', paid_in: 'Paiement reçu', sending_nim: 'Envoi des NIM',
+    delivered: 'NIM livrés', payment_failed: 'Paiement échoué',
+  },
+  why: 'NimCFA bloque votre taux, garde vos NIM en sécurité et vous rembourse automatiquement si le retrait échoue.',
+}
+export function fmtXaf(n: number) { return `${Math.round(n).toLocaleString('fr-FR')} FCFA` }
+export function fmtNim(luna: number) { return (luna / 1e5).toLocaleString('en-US', { maximumFractionDigits: 2 }) }
+export const dicts = { en, fr }
+export type { Dict }

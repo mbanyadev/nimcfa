@@ -1,0 +1,13 @@
+{
+  "name": "nimcfa",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix app install",
+    "dev:server": "npm --prefix server run dev",
+    "dev:app": "npm --prefix app run dev",
+    "build": "npm --prefix app run build",
+    "test": "npm --prefix server test && npm --prefix server run typecheck",
+    "e2e": "npm --prefix server run e2e --"
+  }
+}

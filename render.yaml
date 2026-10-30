@@ -1,0 +1,29 @@
+# One-click deploy of the NimCFA server (testnet + mobile money simulator) on Render's free plan.
+# https://render.com/deploy?repo=https://github.com/mbanyadev/nimcfa
+services:
+  - type: web
+    name: nimcfa-server
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NIM_NETWORK
+        value: testnet
+      - key: PAYOUT_PROVIDER
+        value: simulator
+      - key: MIN_CONFIRMATIONS
+        value: "2"
+      - key: ALLOWED_ORIGINS
+        value: "*"
+      - key: DATA_FILE
+        value: ./data/orders.json
+      - key: ENABLE_DEV_WALLET
+        value: "true"
+      # Secrets: entered in the Render dashboard, never committed.
+      - key: TREASURY_PRIVATE_KEY
+        sync: false
+      - key: DEV_WALLET_PRIVATE_KEY
+        sync: false
