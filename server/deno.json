@@ -1,0 +1,12 @@
+{
+  "unstable": ["kv", "cron"],
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "start": "deno run -A src/main.deno.ts",
+    "test": "deno test -A test/"
+  },
+  "deploy": {
+    "install": "deno install",
+    "runtime": { "type": "dynamic", "entrypoint": "src/main.deno.ts" }
+  }
+}

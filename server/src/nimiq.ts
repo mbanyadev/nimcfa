@@ -1,5 +1,5 @@
 import * as Nimiq from '@nimiq/core'
-import { config } from './config.js'
+import { config } from './config.ts'
 
 let rpcId = 0
 export async function rpc<T>(method: string, params: unknown[] = []): Promise<T> {
@@ -39,7 +39,8 @@ export function isValidAddress(addr: string): boolean {
 
 export function decodeData(hex: string): string {
   if (!hex) return ''
-  return Buffer.from(hex, 'hex').toString('utf8')
+  const bytes = new Uint8Array((hex.match(/../g) ?? []).map(b => parseInt(b, 16)))
+  return new TextDecoder().decode(bytes)
 }
 
 let treasury: Nimiq.KeyPair | null = null

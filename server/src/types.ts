@@ -1,4 +1,4 @@
-import type { Operator } from './phone.js'
+import type { Operator } from './phone.ts'
 
 export type OfframpStatus =
   | 'awaiting_deposit' | 'deposit_seen' | 'paying_out' | 'paid' | 'payout_failed' | 'refunding' | 'refunded' | 'expired'

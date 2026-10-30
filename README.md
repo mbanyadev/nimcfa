@@ -33,11 +33,14 @@ The **History** tab lists your past orders and their on-chain links.
 
 ```
 app/     Vite + React + @nimiq/mini-app-sdk (runs inside Nimiq Pay)
-server/  Node + Hono order engine
+server/  Hono order engine (runs on Node or Deno; Deno Deploy in production)
   ├─ Nimiq: JSON-RPC (nimiqwatch) for chain reads/broadcast, @nimiq/core for signing
   ├─ pricing: CoinGecko NIM/EUR × 655.957 (fixed XAF/EUR peg), cached
   ├─ providers/: simulator | fapshi | campay (pluggable payout + collect)
-  └─ worker: 4 s loop: deposit detection, payouts, collections, refunds, expiry
+  ├─ store: JSON file (Node) | Deno KV (Deno Deploy) | memory, behind one async interface
+  └─ worker: deposit detection, payouts, collections, refunds, expiry. Runs as a 4 s loop while the
+     process is warm, on every order poll, and from a once-a-minute Deno.cron. A per-order lock in the
+     store means only one instance works on an order at a time.
 ```
 
 Fees default to 1.5% (cash-out) and 2% (top-up), with limits of 100 to 500,000 FCFA per order (configurable).
@@ -55,12 +58,15 @@ cd app && npm run dev        # http://localhost:5173 (also on your LAN IP)
 
 * **In Nimiq Pay:** go to Mini Apps → Custom URL (switch to testnet in the hidden developer menu: long-press Settings for about 10 s) → `http://<your-LAN-IP>:5173`.
 * **In a desktop browser:** set `ENABLE_DEV_WALLET=true` and `DEV_WALLET_PRIVATE_KEY` in `server/.env` (testnet only). The app then uses a server-side test wallet so you can click through the whole flow.
+* `STORE` picks the order store: `file` (default on Node), `kv` (default on Deno) or `memory`. `WORKER_INTERVAL_MS=0` turns off the background loop, so you can check that orders still complete from polling alone, as they do on a serverless host.
 * `npm test` runs the unit tests and the typecheck. `npm run e2e -- 670000000` runs a full testnet cash-out and top-up against the running server. With the simulator, numbers ending in 1 or 3 fail, so you can watch a refund happen.
 
 ### Deploy
 
 * **App:** `VITE_API_URL=https://<server> ./scripts/deploy-pages.sh` builds `app/` and publishes it to the `gh-pages` branch (GitHub Pages).
-* **Server:** `render.yaml` is a Render Blueprint for the free plan (testnet + simulator). Use https://render.com/deploy?repo=https://github.com/mbanyadev/nimcfa and paste `TREASURY_PRIVATE_KEY` and `DEV_WALLET_PRIVATE_KEY` (testnet keys) when asked. The free plan sleeps after 15 minutes idle, so the first request can take about a minute.
+* **Server (Deno Deploy, free plan):** `server/deno.json` holds the build config (`deno install`, entry point `src/main.deno.ts`, KV and cron enabled). In https://console.deno.com: sign in with GitHub, create an organization, then **New App** → this repo → app directory `server`. Under **Databases**, provision a Deno KV database and link it to the app. Add the environment variables `NIM_NETWORK=testnet`, `PAYOUT_PROVIDER=simulator`, `MIN_CONFIRMATIONS=2`, `ALLOWED_ORIGINS=*`, `ENABLE_DEV_WALLET=true` and the secrets `TREASURY_PRIVATE_KEY` and `DEV_WALLET_PRIVATE_KEY` (testnet keys). The app is served at `https://<app>.<org>.deno.net`. Run it the same way locally with `cd server && deno task start` (port 8000, local KV file).
+* **Server (any Docker host, e.g. Hugging Face Spaces):** `server/Dockerfile` runs the Node build on port 7860 with the file store. Set the same variables.
+* **Server (plain Node):** `npm start` in `server/` (file store in `./data`).
 
 ### Configuration
 See `server/.env.example`. Key settings: `NIM_NETWORK` (testnet|mainnet), `TREASURY_PRIVATE_KEY`, `PAYOUT_PROVIDER` (simulator|fapshi|campay) and the matching provider credentials, `ALLOWED_ORIGINS`. **No secrets are committed.**

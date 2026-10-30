@@ -1,4 +1,4 @@
-import { config } from './config.js'
+import { config } from './config.ts'
 
 /** The CFA franc (XAF) is pegged to the euro: 1 EUR = 655.957 XAF, fixed by treaty. */
 export const XAF_PER_EUR = 655.957

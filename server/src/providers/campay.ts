@@ -1,5 +1,5 @@
-import { config } from '../config.js'
-import type { MobileMoneyProvider, ProviderStatus } from './types.js'
+import { config } from '../config.ts'
+import type { MobileMoneyProvider, ProviderStatus } from './types.ts'
 
 /** CamPay (Cameroon). DEV: https://demo.campay.net/api (max 25 XAF per transaction), PROD: https://app.campay.net/api */
 async function call<T>(path: string, method: 'GET' | 'POST', body?: unknown): Promise<T> {

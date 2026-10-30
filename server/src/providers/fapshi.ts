@@ -1,5 +1,5 @@
-import { config } from '../config.js'
-import type { MobileMoneyProvider, ProviderStatus } from './types.js'
+import { config } from '../config.ts'
+import type { MobileMoneyProvider, ProviderStatus } from './types.ts'
 
 /** Fapshi (Cameroon): MTN MoMo + Orange Money. Sandbox: https://sandbox.fapshi.com, live: https://live.fapshi.com */
 async function call<T>(path: string, init: { method: 'GET' | 'POST', body?: unknown, kind: 'payout' | 'collect' }): Promise<T> {

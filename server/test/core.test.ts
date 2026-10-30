@@ -2,9 +2,9 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 process.env.FIXED_XAF_PER_NIM = '0.2'
 process.env.DATA_FILE = '/tmp/nimcfa-test-orders.json'
-const { detectOperator, normalizeCmPhone } = await import('../src/phone.js')
-const { quoteOfframpFromXaf, quoteOnramp } = await import('../src/pricing.js')
-const { checkDeposit } = await import('../src/orders.js')
+const { detectOperator, normalizeCmPhone } = await import('../src/phone.ts')
+const { quoteOfframpFromXaf, quoteOnramp } = await import('../src/pricing.ts')
+const { checkDeposit } = await import('../src/orders.ts')
 
 test('phone numbers', () => {
   assert.equal(normalizeCmPhone('+237 6 70 00 00 00'), '670000000')

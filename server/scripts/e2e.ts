@@ -7,7 +7,7 @@
  */
 import 'dotenv/config'
 import * as Nimiq from '@nimiq/core'
-import { rpc, sendNim } from '../src/nimiq.js'
+import { rpc, sendNim } from '../src/nimiq.ts'
 
 const API = process.env.E2E_API ?? 'http://localhost:8787'
 const phone = process.argv[2] ?? '670000000'

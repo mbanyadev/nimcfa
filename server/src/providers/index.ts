@@ -1,8 +1,8 @@
-import { config } from '../config.js'
-import { campay } from './campay.js'
-import { fapshi } from './fapshi.js'
-import { simulator } from './simulator.js'
-import type { MobileMoneyProvider } from './types.js'
+import { config } from '../config.ts'
+import { campay } from './campay.ts'
+import { fapshi } from './fapshi.ts'
+import { simulator } from './simulator.ts'
+import type { MobileMoneyProvider } from './types.ts'
 
 export function getProvider(): MobileMoneyProvider {
   switch (config.provider) {

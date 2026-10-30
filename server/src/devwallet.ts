@@ -1,7 +1,7 @@
 import * as Nimiq from '@nimiq/core'
 import type { Hono } from 'hono'
-import { config } from './config.js'
-import { rpc } from './nimiq.js'
+import { config } from './config.ts'
+import { rpc } from './nimiq.ts'
 
 /**
  * Browser-preview wallet, for testing the mini app outside Nimiq Pay (desktop browser, CI, screenshots).

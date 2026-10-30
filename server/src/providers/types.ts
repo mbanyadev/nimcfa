@@ -1,4 +1,4 @@
-import type { Operator } from '../phone.js'
+import type { Operator } from '../phone.ts'
 
 export type ProviderStatus = 'pending' | 'successful' | 'failed'
 
