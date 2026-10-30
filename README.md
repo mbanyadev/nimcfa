@@ -9,6 +9,7 @@ A Nimiq Pay mini app for Cameroon (CEMAC). You can **cash out NIM to MTN MoMo or
 ## Try it
 
 * **Mini app (GitHub Pages):** https://mbanyadev.github.io/nimcfa/ (open it in Nimiq Pay → Mini Apps → Custom URL, on testnet).
+* **Demo video (2:31):** [docs/video/nimcfa-demo.mp4](docs/video/nimcfa-demo.mp4), recorded headless from the live Pages build on testnet (`docs/video/record.mjs` + `build.py`).
 * In a desktop browser the app falls back to a testnet preview wallet held by the server, so you can click through cash-out, top-up and refund without installing anything.
 * The app talks to the server set at build time (`VITE_API_URL`). To point the same build at another server, add `?api=https://your-server` to the URL once.
 
