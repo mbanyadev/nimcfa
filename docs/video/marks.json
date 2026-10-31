@@ -1,0 +1,66 @@
+[
+ {
+  "k": "open",
+  "t": 0.201
+ },
+ {
+  "k": "connect-visible",
+  "t": 9.633
+ },
+ {
+  "k": "connected",
+  "t": 13.493
+ },
+ {
+  "k": "cashout-form",
+  "t": 17.037
+ },
+ {
+  "k": "cashout-confirm",
+  "t": 23.771
+ },
+ {
+  "k": "cashout-order",
+  "t": 26.673
+ },
+ {
+  "k": "cashout-paid",
+  "t": 34.498
+ },
+ {
+  "k": "refund-form",
+  "t": 40.756
+ },
+ {
+  "k": "refund-order",
+  "t": 46.394
+ },
+ {
+  "k": "refunded",
+  "t": 53.722
+ },
+ {
+  "k": "topup-form",
+  "t": 60.494
+ },
+ {
+  "k": "topup-order",
+  "t": 66.005
+ },
+ {
+  "k": "delivered",
+  "t": 71.823
+ },
+ {
+  "k": "history",
+  "t": 76.861
+ },
+ {
+  "k": "french",
+  "t": 83.126
+ },
+ {
+  "k": "end",
+  "t": 93.241
+ }
+]

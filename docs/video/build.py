@@ -1,6 +1,7 @@
 import json, subprocess
 m = {x['k']: x['t'] for x in json.load(open('marks.json'))}
-INTRO, SESSION = 14.0, 102.36
+INTRO = 14.0
+SESSION = m['end'] + 0.8
 ARCH, OUTRO = 20.0, 15.0
 S = INTRO  # session offset
 END_S = S + SESSION
@@ -18,23 +19,25 @@ add(6.0,INTRO,'Small',r"{\fad(400,300)}Nimiq Mini Apps Competition · Cycle III 
 # Session captions (left panel)
 caps = [
  (0, m['connected'], "Demo",
-  "The live mini app from GitHub Pages, on Nimiq testnet. Outside Nimiq Pay it uses a testnet preview wallet; inside Nimiq Pay the same calls go through the mini app SDK."),
- (m['connected'], m['cashout-confirm'], "1 · Cash out",
+  "The live mini app from GitHub Pages, on Nimiq testnet. The order engine runs right in your browser. Outside Nimiq Pay a testnet preview wallet stands in; inside Nimiq Pay the same calls go through the mini app SDK."),
+ (m['connected'], m['cashout-form'], "Home",
+  "Your NIM balance, its value in FCFA at the live rate, and two big actions: cash out or top up."),
+ (m['cashout-form'], m['cashout-confirm'], "1 · Cash out",
   "Enter the FCFA you want to receive and a mobile money number. MTN MoMo or Orange Money is detected from the prefix, and the rate is locked for 10 minutes."),
  (m['cashout-confirm'], m['cashout-paid'], "1 · Cash out",
-  "One approval sends NIM to the escrow address with the order memo. The server checks sender, memo, amount and network on-chain, then pays out to mobile money."),
+  "One approval sends NIM to the escrow address with the order memo. The engine checks sender, memo, amount and network on-chain, then pays out to mobile money."),
  (m['cashout-paid'], m['refund-form'], "1 · Paid",
-  "2,000 FCFA sent to MTN MoMo. Every step links to the transaction on the Nimiq testnet explorer."),
+  "10,000 FCFA sent to MTN MoMo. Transaction details link every step to the Nimiq testnet explorer."),
  (m['refund-form'], m['refunded'], "2 · Automatic refund",
   "What if the operator rejects the payout? The simulator fails numbers ending in 1 so we can show it: the NIM goes straight back to the sender."),
  (m['refunded'], m['topup-form'], "2 · Refunded",
-  "Refunded on-chain. An unknown payout result is held for manual review instead of retried, so nobody is ever paid twice."),
+  "Refunded on-chain, with the reason and a reference. An unknown payout result is held for review instead of retried, so nobody is ever paid twice."),
  (m['topup-form'], m['delivered'], "3 · Top up",
-  "Pay FCFA with a USSD push on your phone. Once the operator confirms, the server sends NIM to your Nimiq Pay address."),
+  "Pay FCFA by approving a USSD prompt on your phone. Once the operator confirms, NIM is sent to your Nimiq Pay address."),
  (m['delivered'], m['history'], "3 · NIM delivered",
   "Mobile money in, NIM out, in seconds on testnet."),
- (m['history'], m['french'], "History",
-  "Every order, its status and its on-chain links, so users have a reason to come back."),
+ (m['history'], m['french'], "Recent activity",
+  "Every order and its status on the home screen, refunds included, so users have a reason to come back."),
  (m['french'], SESSION, "Bilingual",
   "French and English. The app follows the Nimiq Pay host language and network."),
 ]
@@ -47,7 +50,7 @@ A = END_S
 add(A+0.3, A+ARCH, 'H2', r"{\fad(400,300)}How it works")
 add(A+0.8, A+ARCH, 'List', r"{\fad(400,300)}"
     r"• App: Vite + React + @nimiq/mini-app-sdk: accounts, balance, send with memo, host language and network\N"
-    r"• Server: Node + Hono order engine, Nimiq JSON-RPC, @nimiq/core signing\N"
+    r"• Engine: TypeScript order engine (Hono routes, Nimiq JSON-RPC, @nimiq/core signing). This demo runs it in the browser; production runs the same code on Node or Deno\N"
     r"• Price: CoinGecko NIM/EUR × 655.957 (fixed FCFA/EUR peg), 10-minute quotes\N"
     r"• Mobile money: pluggable simulator, Fapshi or CamPay sandbox\N"
     r"• Safety: deposit only from the order's wallet with its memo, automatic refunds, one payout attempt per order, masked phone numbers")
