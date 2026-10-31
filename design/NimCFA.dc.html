@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/organic-9b5d3128-fa3a-47b2-8b06-3fdfbdd24789/styles.css">
+<script src="_ds/organic-9b5d3128-fa3a-47b2-8b06-3fdfbdd24789/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<style>
+body{margin:0;background:#f5ead8;font-family:var(--font-body);color:#201e1d}
+a{color:#1F2348}a:hover{color:#E9B213}
+input{font:inherit;color:inherit}
+input:focus-visible,button:focus-visible{outline:2px solid #E9B213;outline-offset:2px}
+</style>
+</helmet>
+<div style="padding:56px 64px 96px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:8px;max-width:720px">
+<div style="font-family:var(--font-heading);font-size:44px;color:#1F2348;line-height:1.05">NimCFA</div>
+<div style="font-size:17px;line-height:1.5;color:#3d3a36;text-wrap:pretty">Mini app for Nimiq Pay. Cash out NIM to MTN MoMo or Orange Money in FCFA, or top up NIM with mobile money. 390 × 844 frames. Amount and phone fields on both Cash out screens are live: try 65x, 67x, 68x, 69x prefixes.</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+
+<!-- 1 HOME -->
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-weight:700;font-size:15px;color:#1F2348">1 · Home</div>
+<div data-screen-label="01 Home" style="width:390px;height:844px;border-radius:48px;overflow:hidden;background:#FBF7EF;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column">
+<div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-weight:700;font-size:15px;color:#201e1d"><span>9:41</span><span style="width:24px;height:11px;border-radius:4px;border:2px solid #201e1d;box-sizing:border-box;padding:1px"><span style="display:block;width:70%;height:100%;background:#201e1d;border-radius:1px"></span></span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:4px 16px 12px">
+<div style="width:30px;height:28px;background:#E9B213;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)"></div>
+<div style="font-family:var(--font-heading);font-size:19px;color:#1F2348">NimCFA</div>
+<sc-if value="{{ showTestnet }}" hint-placeholder-val="{{ true }}"><div style="font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#E9B213"></span>Testnet demo</div></sc-if>
+<div style="flex:1"></div>
+<div style="display:flex;padding:3px;border-radius:999px;background:#EDEEF5;font-size:11px;font-weight:700"><span style="padding:4px 9px;border-radius:999px;background:#1F2348;color:#fff">EN</span><span style="padding:4px 9px;color:#1F2348">FR</span></div>
+<div style="width:32px;height:32px;border-radius:50%;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></div>
+</div>
+<div style="flex:1;padding:4px 18px 24px;display:flex;flex-direction:column;gap:18px">
+<div style="position:relative;overflow:hidden;border-radius:32px;background:#1F2348;color:#fff;padding:24px 22px 22px;display:flex;flex-direction:column;gap:6px;box-shadow:0 14px 30px rgba(31,35,72,.28)">
+<sc-if value="{{ showPattern }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;opacity:.55;background-color:#1F2348;background-image:repeating-linear-gradient(45deg,transparent 0 10px,#E9B213 10px 12px),repeating-linear-gradient(-45deg,transparent 0 10px,#E9B213 10px 12px)"></div></sc-if>
+<div style="position:relative;font-size:14px;font-weight:600;opacity:.8">Wallet balance</div>
+<div style="position:relative;display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--font-heading);font-size:44px;line-height:1.1">48,250</span><span style="font-weight:700;font-size:18px;color:#E9B213">NIM</span></div>
+<div style="position:relative;font-size:16px;font-weight:600;opacity:.9">≈ 29,915 FCFA</div>
+<div style="position:relative;margin-top:10px;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.12);align-self:flex-start">1 NIM = 0.62 FCFA</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div style="border-radius:28px;background:#E9B213;color:#1F2348;padding:18px;display:flex;flex-direction:column;gap:22px;box-shadow:0 10px 22px rgba(233,178,19,.35)">
+<div style="width:44px;height:44px;border-radius:50%;background:#1F2348;color:#E9B213;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10M7 17 17 7"></path></svg></div>
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:var(--font-heading);font-size:22px">Cash out</span><span style="font-size:13px;font-weight:600">NIM → MoMo</span></div>
+</div>
+<div style="border-radius:28px;background:#fff;color:#1F2348;padding:18px;display:flex;flex-direction:column;gap:22px;box-shadow:var(--shadow-md)">
+<div style="width:44px;height:44px;border-radius:50%;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7 7 17M17 17H7V7"></path></svg></div>
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:var(--font-heading);font-size:22px">Top up</span><span style="font-size:13px;font-weight:600;color:#55597a">MoMo → NIM</span></div>
+</div>
+</div>
+<div style="border-radius:28px;background:#FCF1CF;display:flex;align-items:center;gap:14px;padding:14px 14px 14px 18px">
+<div style="display:flex;flex-direction:column;gap:6px;flex:1"><span style="font-family:var(--font-heading);font-size:18px;color:#1F2348;line-height:1.2">MTN & Orange, in seconds</span><span style="font-size:13px;color:#5b4a12;line-height:1.4">Paid straight to your mobile money wallet.</span></div>
+<div style="width:104px;height:104px;flex-shrink:0"><image-slot id="home-hero" shape="circle" placeholder="Illustration" style="width:104px;height:104px"></image-slot></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-weight:700;font-size:14px;color:#55597a">Recent</div>
+<div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:22px;padding:12px 14px;box-shadow:var(--shadow-sm)"><span style="width:36px;height:36px;border-radius:50%;background:#FFCC00;color:#1a1a1a;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center">MTN</span><div style="flex:1;display:flex;flex-direction:column"><span style="font-weight:700;font-size:15px">Cash out</span><span style="font-size:12px;color:#6b6e86">Today, 08:12</span></div><span style="font-weight:700;font-size:15px">10,000 FCFA</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:22px;padding:12px 14px;box-shadow:var(--shadow-sm)"><span style="width:36px;height:36px;border-radius:50%;background:#FF7900;color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center">OM</span><div style="flex:1;display:flex;flex-direction:column"><span style="font-weight:700;font-size:15px">Top up</span><span style="font-size:12px;color:#6b6e86">Yesterday</span></div><span style="font-weight:700;font-size:15px;color:#4f5c39">+15,887 NIM</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 2 CASH OUT EN -->
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-weight:700;font-size:15px;color:#1F2348">2 · Cash out — English</div>
+<div data-screen-label="02 Cash out EN" style="width:390px;height:844px;border-radius:48px;overflow:hidden;background:#FBF7EF;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column">
+<div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-weight:700;font-size:15px"><span>9:41</span><span style="width:24px;height:11px;border-radius:4px;border:2px solid #201e1d;box-sizing:border-box;padding:1px"><span style="display:block;width:70%;height:100%;background:#201e1d;border-radius:1px"></span></span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:4px 16px 12px">
+<div style="width:30px;height:28px;background:#E9B213;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)"></div>
+<div style="font-family:var(--font-heading);font-size:19px;color:#1F2348">NimCFA</div>
+<sc-if value="{{ showTestnet }}" hint-placeholder-val="{{ true }}"><div style="font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#E9B213"></span>Testnet demo</div></sc-if>
+<div style="flex:1"></div>
+<div style="display:flex;padding:3px;border-radius:999px;background:#EDEEF5;font-size:11px;font-weight:700"><span style="padding:4px 9px;border-radius:999px;background:#1F2348;color:#fff">EN</span><span style="padding:4px 9px;color:#1F2348">FR</span></div>
+<div style="width:32px;height:32px;border-radius:50%;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></div>
+</div>
+<div style="flex:1;padding:2px 18px 22px;display:flex;flex-direction:column;gap:14px">
+<div style="display:grid;grid-template-columns:1fr 1fr;padding:5px;border-radius:999px;background:#EDEEF5;font-weight:700;font-size:15px;text-align:center"><span style="padding:11px;border-radius:999px;background:#1F2348;color:#fff">Cash out</span><span style="padding:11px;color:#1F2348">Top up</span></div>
+<div style="background:#fff;border-radius:32px;padding:20px 22px 18px;box-shadow:var(--shadow-md);display:flex;flex-direction:column;gap:12px">
+<span style="font-size:14px;font-weight:600;color:#55597a">You receive</span>
+<div style="display:flex;align-items:baseline;gap:8px"><input inputmode="numeric" value="{{ en.amtText }}" onChange="{{ en.onAmt }}" style="flex:1;min-width:0;border:0;background:transparent;font-family:var(--font-heading);font-size:54px;line-height:1.05;color:#1F2348;padding:0;outline:none"><span style="font-weight:800;font-size:18px;color:#1F2348">FCFA</span></div>
+<div style="display:flex;gap:8px"><button onClick="{{ en.q5 }}" style="border:0;cursor:pointer;padding:8px 14px;border-radius:999px;background:#FCF1CF;color:#5b4a12;font-weight:700;font-size:13px">5,000</button><button onClick="{{ en.q10 }}" style="border:0;cursor:pointer;padding:8px 14px;border-radius:999px;background:#FCF1CF;color:#5b4a12;font-weight:700;font-size:13px">10,000</button><button onClick="{{ en.q25 }}" style="border:0;cursor:pointer;padding:8px 14px;border-radius:999px;background:#FCF1CF;color:#5b4a12;font-weight:700;font-size:13px">25,000</button></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<span style="font-size:14px;font-weight:600;color:#55597a;padding-left:6px">Mobile money number</span>
+<div style="display:flex;align-items:center;gap:10px;background:#fff;border-radius:999px;padding:8px 8px 8px 18px;box-shadow:var(--shadow-sm)">
+<span style="font-weight:700;color:#55597a">+237</span>
+<input inputmode="tel" value="{{ en.phone }}" onChange="{{ en.onPhone }}" style="flex:1;min-width:0;border:0;background:transparent;font-weight:700;font-size:18px;letter-spacing:.02em;outline:none;padding:6px 0">
+<sc-if value="{{ en.isMtn }}" hint-placeholder-val="{{ true }}"><span style="display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:#FFCC00;color:#1a1a1a;font-weight:800;font-size:13px"><span style="width:8px;height:8px;border-radius:50%;background:#1a1a1a"></span>MTN MoMo</span></sc-if>
+<sc-if value="{{ en.isOrange }}" hint-placeholder-val="{{ false }}"><span style="display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:#FF7900;color:#fff;font-weight:800;font-size:13px"><span style="width:8px;height:8px;border-radius:2px;background:#fff"></span>Orange Money</span></sc-if>
+<sc-if value="{{ en.isNone }}" hint-placeholder-val="{{ false }}"><span style="padding:8px 12px;border-radius:999px;background:#EDEEF5;color:#55597a;font-weight:700;font-size:13px">Detecting…</span></sc-if>
+</div>
+</div>
+<div style="background:#fff;border-radius:28px;padding:16px 20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:10px;font-size:15px">
+<div style="display:flex;justify-content:space-between"><span style="color:#55597a">Fee (1.5%)</span><span style="font-weight:700">{{ en.fee }} FCFA</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:#55597a">You send</span><span style="font-family:var(--font-heading);font-size:24px;color:#1F2348">{{ en.nim }} <span style="font-family:var(--font-body);font-weight:800;font-size:14px;color:#9a7509">NIM</span></span></div>
+<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#55597a">Rate</span><span style="font-weight:600;color:#55597a">1 NIM = 0.62 FCFA</span></div>
+</div>
+<div style="flex:1"></div>
+<div style="align-self:center;display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;background:#e5ead9;color:#3b4529;font-weight:700;font-size:14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>Rate locked for {{ clock }}</div>
+<button style="border:0;cursor:pointer;height:60px;border-radius:999px;background:#E9B213;color:#1F2348;font-family:var(--font-heading);font-size:22px;box-shadow:0 10px 22px rgba(233,178,19,.4)" style-hover="background:#f2c33a" style-active="background:#cf9e10">Cash out</button>
+</div>
+</div>
+</div>
+
+<!-- 2 CASH OUT FR -->
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-weight:700;font-size:15px;color:#1F2348">2 · Retrait — Français</div>
+<div data-screen-label="02 Cash out FR" style="width:390px;height:844px;border-radius:48px;overflow:hidden;background:#FBF7EF;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column">
+<div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-weight:700;font-size:15px"><span>9:41</span><span style="width:24px;height:11px;border-radius:4px;border:2px solid #201e1d;box-sizing:border-box;padding:1px"><span style="display:block;width:70%;height:100%;background:#201e1d;border-radius:1px"></span></span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:4px 16px 12px">
+<div style="width:30px;height:28px;background:#E9B213;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)"></div>
+<div style="font-family:var(--font-heading);font-size:19px;color:#1F2348">NimCFA</div>
+<sc-if value="{{ showTestnet }}" hint-placeholder-val="{{ true }}"><div style="font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#E9B213"></span>Démo testnet</div></sc-if>
+<div style="flex:1"></div>
+<div style="display:flex;padding:3px;border-radius:999px;background:#EDEEF5;font-size:11px;font-weight:700"><span style="padding:4px 9px;color:#1F2348">EN</span><span style="padding:4px 9px;border-radius:999px;background:#1F2348;color:#fff">FR</span></div>
+<div style="width:32px;height:32px;border-radius:50%;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></div>
+</div>
+<div style="flex:1;padding:2px 18px 22px;display:flex;flex-direction:column;gap:14px">
+<div style="display:grid;grid-template-columns:1fr 1fr;padding:5px;border-radius:999px;background:#EDEEF5;font-weight:700;font-size:15px;text-align:center"><span style="padding:11px;border-radius:999px;background:#1F2348;color:#fff">Retirer</span><span style="padding:11px;color:#1F2348">Recharger</span></div>
+<div style="background:#fff;border-radius:32px;padding:20px 22px 18px;box-shadow:var(--shadow-md);display:flex;flex-direction:column;gap:12px">
+<span style="font-size:14px;font-weight:600;color:#55597a">Vous recevez</span>
+<div style="display:flex;align-items:baseline;gap:8px"><input inputmode="numeric" value="{{ fr.amtText }}" onChange="{{ fr.onAmt }}" style="flex:1;min-width:0;border:0;background:transparent;font-family:var(--font-heading);font-size:54px;line-height:1.05;color:#1F2348;padding:0;outline:none"><span style="font-weight:800;font-size:18px;color:#1F2348">FCFA</span></div>
+<div style="display:flex;gap:8px"><button onClick="{{ fr.q5 }}" style="border:0;cursor:pointer;padding:8px 14px;border-radius:999px;background:#FCF1CF;color:#5b4a12;font-weight:700;font-size:13px">5 000</button><button onClick="{{ fr.q10 }}" style="border:0;cursor:pointer;padding:8px 14px;border-radius:999px;background:#FCF1CF;color:#5b4a12;font-weight:700;font-size:13px">10 000</button><button onClick="{{ fr.q25 }}" style="border:0;cursor:pointer;padding:8px 14px;border-radius:999px;background:#FCF1CF;color:#5b4a12;font-weight:700;font-size:13px">25 000</button></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<span style="font-size:14px;font-weight:600;color:#55597a;padding-left:6px">Numéro Mobile Money</span>
+<div style="display:flex;align-items:center;gap:10px;background:#fff;border-radius:999px;padding:8px 8px 8px 18px;box-shadow:var(--shadow-sm)">
+<span style="font-weight:700;color:#55597a">+237</span>
+<input inputmode="tel" value="{{ fr.phone }}" onChange="{{ fr.onPhone }}" style="flex:1;min-width:0;border:0;background:transparent;font-weight:700;font-size:18px;letter-spacing:.02em;outline:none;padding:6px 0">
+<sc-if value="{{ fr.isMtn }}" hint-placeholder-val="{{ false }}"><span style="display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:#FFCC00;color:#1a1a1a;font-weight:800;font-size:13px"><span style="width:8px;height:8px;border-radius:50%;background:#1a1a1a"></span>MTN MoMo</span></sc-if>
+<sc-if value="{{ fr.isOrange }}" hint-placeholder-val="{{ true }}"><span style="display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:#FF7900;color:#fff;font-weight:800;font-size:13px"><span style="width:8px;height:8px;border-radius:2px;background:#fff"></span>Orange Money</span></sc-if>
+<sc-if value="{{ fr.isNone }}" hint-placeholder-val="{{ false }}"><span style="padding:8px 12px;border-radius:999px;background:#EDEEF5;color:#55597a;font-weight:700;font-size:13px">Détection…</span></sc-if>
+</div>
+</div>
+<div style="background:#fff;border-radius:28px;padding:16px 20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:10px;font-size:15px">
+<div style="display:flex;justify-content:space-between"><span style="color:#55597a">Frais (1,5 %)</span><span style="font-weight:700">{{ fr.fee }} FCFA</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:#55597a">Vous envoyez</span><span style="font-family:var(--font-heading);font-size:24px;color:#1F2348">{{ fr.nim }} <span style="font-family:var(--font-body);font-weight:800;font-size:14px;color:#9a7509">NIM</span></span></div>
+<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#55597a">Taux</span><span style="font-weight:600;color:#55597a">1 NIM = 0,62 FCFA</span></div>
+</div>
+<div style="flex:1"></div>
+<div style="align-self:center;display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;background:#e5ead9;color:#3b4529;font-weight:700;font-size:14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>Taux bloqué pendant {{ clock }}</div>
+<button style="border:0;cursor:pointer;height:60px;border-radius:999px;background:#E9B213;color:#1F2348;font-family:var(--font-heading);font-size:22px;box-shadow:0 10px 22px rgba(233,178,19,.4)" style-hover="background:#f2c33a" style-active="background:#cf9e10">Retirer</button>
+</div>
+</div>
+</div>
+
+<!-- 3a PROGRESS -->
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-weight:700;font-size:15px;color:#1F2348">3 · Cash out progress</div>
+<div data-screen-label="03 Progress" style="width:390px;height:844px;border-radius:48px;overflow:hidden;background:#FBF7EF;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column">
+<div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-weight:700;font-size:15px"><span>9:41</span><span style="width:24px;height:11px;border-radius:4px;border:2px solid #201e1d;box-sizing:border-box;padding:1px"><span style="display:block;width:70%;height:100%;background:#201e1d;border-radius:1px"></span></span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:4px 16px 12px">
+<div style="width:30px;height:28px;background:#E9B213;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)"></div>
+<div style="font-family:var(--font-heading);font-size:19px;color:#1F2348">NimCFA</div>
+<sc-if value="{{ showTestnet }}" hint-placeholder-val="{{ true }}"><div style="font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#E9B213"></span>Testnet demo</div></sc-if>
+<div style="flex:1"></div>
+<div style="display:flex;padding:3px;border-radius:999px;background:#EDEEF5;font-size:11px;font-weight:700"><span style="padding:4px 9px;border-radius:999px;background:#1F2348;color:#fff">EN</span><span style="padding:4px 9px;color:#1F2348">FR</span></div>
+<div style="width:32px;height:32px;border-radius:50%;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></div>
+</div>
+<div style="flex:1;padding:12px 22px 24px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<span style="font-size:15px;font-weight:600;color:#55597a">Sending to MTN MoMo · 677 12 34 56</span>
+<div style="display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--font-heading);font-size:50px;color:#1F2348;line-height:1.05">10,000</span><span style="font-weight:800;font-size:18px;color:#1F2348">FCFA</span></div>
+<span style="font-size:14px;color:#55597a">16,371 NIM · fee 150 FCFA</span>
+</div>
+<div style="background:#fff;border-radius:32px;padding:24px 22px;box-shadow:var(--shadow-md);display:flex;flex-direction:column">
+<div style="display:flex;gap:14px"><div style="display:flex;flex-direction:column;align-items:center"><span style="width:36px;height:36px;border-radius:50%;background:#7a8a5e;color:#fff;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span><span style="width:4px;height:40px;border-radius:2px;background:#7a8a5e"></span></div><div style="display:flex;flex-direction:column;gap:2px;padding-top:6px"><span style="font-weight:700;font-size:16px">Quote locked</span><span style="font-size:13px;color:#6b6e86">08:12 · 1 NIM = 0.62 FCFA</span></div></div>
+<div style="display:flex;gap:14px"><div style="display:flex;flex-direction:column;align-items:center"><span style="width:36px;height:36px;border-radius:50%;background:#7a8a5e;color:#fff;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span><span style="width:4px;height:40px;border-radius:2px;background:linear-gradient(#7a8a5e,#E9B213)"></span></div><div style="display:flex;flex-direction:column;gap:2px;padding-top:6px"><span style="font-weight:700;font-size:16px">NIM sent</span><span style="font-size:13px;color:#6b6e86">08:12 · <a href="#" style="font-weight:700">View transaction</a></span></div></div>
+<div style="display:flex;gap:14px"><div style="display:flex;flex-direction:column;align-items:center"><span style="width:36px;height:36px;border-radius:50%;background:#FCF1CF;box-sizing:border-box;border:4px solid #E9B213;border-right-color:#FCF1CF;display:flex;align-items:center;justify-content:center"></span></div><div style="display:flex;flex-direction:column;gap:2px;padding-top:6px"><span style="font-weight:700;font-size:16px;color:#1F2348">Paid to MoMo</span><span style="font-size:13px;color:#6b6e86">Usually under a minute</span></div></div>
+</div>
+<div style="flex:1"></div>
+<div style="display:flex;gap:12px;align-items:center;background:#EDEEF5;border-radius:24px;padding:14px 16px;color:#1F2348"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><span style="font-size:14px;line-height:1.4;font-weight:600">If the payout fails, your NIM comes back automatically.</span></div>
+</div>
+</div>
+</div>
+
+<!-- 3b SUCCESS -->
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-weight:700;font-size:15px;color:#1F2348">3 · Cash out success</div>
+<div data-screen-label="03 Success" style="width:390px;height:844px;border-radius:48px;overflow:hidden;background:#FBF7EF;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column">
+<div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-weight:700;font-size:15px"><span>9:41</span><span style="width:24px;height:11px;border-radius:4px;border:2px solid #201e1d;box-sizing:border-box;padding:1px"><span style="display:block;width:70%;height:100%;background:#201e1d;border-radius:1px"></span></span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:4px 16px 12px">
+<div style="width:30px;height:28px;background:#E9B213;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)"></div>
+<div style="font-family:var(--font-heading);font-size:19px;color:#1F2348">NimCFA</div>
+<sc-if value="{{ showTestnet }}" hint-placeholder-val="{{ true }}"><div style="font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#E9B213"></span>Testnet demo</div></sc-if>
+<div style="flex:1"></div>
+<div style="display:flex;padding:3px;border-radius:999px;background:#EDEEF5;font-size:11px;font-weight:700"><span style="padding:4px 9px;border-radius:999px;background:#1F2348;color:#fff">EN</span><span style="padding:4px 9px;color:#1F2348">FR</span></div>
+<div style="width:32px;height:32px;border-radius:50%;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></div>
+</div>
+<div style="flex:1;padding:8px 22px 24px;display:flex;flex-direction:column;gap:20px">
+<div style="position:relative;height:290px;display:flex;align-items:center;justify-content:center">
+<sc-if value="{{ showPattern }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;width:270px;height:270px;border-radius:50%;opacity:.16;background-image:repeating-linear-gradient(45deg,transparent 0 12px,#1F2348 12px 14px),repeating-linear-gradient(-45deg,transparent 0 12px,#1F2348 12px 14px)"></div></sc-if>
+<div style="position:relative;width:150px;height:150px;border-radius:50%;background:#E9B213;color:#1F2348;display:flex;align-items:center;justify-content:center;box-shadow:0 16px 36px rgba(233,178,19,.45)"><svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<span style="position:absolute;left:44px;top:46px;width:18px;height:18px;background:#E9B213;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)"></span>
+<span style="position:absolute;right:52px;top:30px;width:14px;height:14px;border-radius:50%;background:#007A5E"></span>
+<span style="position:absolute;right:30px;top:150px;width:22px;height:8px;border-radius:999px;background:#CE1126;transform:rotate(-30deg)"></span>
+<span style="position:absolute;left:30px;bottom:60px;width:20px;height:8px;border-radius:999px;background:#007A5E;transform:rotate(25deg)"></span>
+<span style="position:absolute;right:70px;bottom:30px;width:20px;height:20px;background:#E9B213;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)"></span>
+<span style="position:absolute;left:84px;bottom:24px;width:10px;height:10px;border-radius:50%;background:#1F2348"></span>
+<span style="position:absolute;left:96px;top:14px;width:9px;height:9px;border-radius:50%;background:#CE1126"></span>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;text-align:center;align-items:center">
+<span style="font-family:var(--font-heading);font-size:34px;color:#1F2348;line-height:1.1">Paid!</span>
+<span style="font-size:17px;line-height:1.45;color:#3d3a36;max-width:290px">10,000 FCFA is in your MTN MoMo wallet, 677 12 34 56.</span>
+</div>
+<div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap">
+<span style="display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:999px;background:#e5ead9;color:#3b4529;font-weight:700;font-size:13px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Quote locked</span>
+<span style="display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:999px;background:#e5ead9;color:#3b4529;font-weight:700;font-size:13px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>NIM sent</span>
+<span style="display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:999px;background:#e5ead9;color:#3b4529;font-weight:700;font-size:13px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Paid to MoMo</span>
+</div>
+<div style="flex:1"></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<button style="border:0;cursor:pointer;height:60px;border-radius:999px;background:#1F2348;color:#fff;font-family:var(--font-heading);font-size:21px" style-hover="background:#2c3163">Done</button>
+<button style="border:0;cursor:pointer;height:48px;border-radius:999px;background:transparent;color:#1F2348;font-weight:700;font-size:15px" style-hover="background:#EDEEF5">Share receipt</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 4a TOP UP FORM -->
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-weight:700;font-size:15px;color:#1F2348">4 · Top up</div>
+<div data-screen-label="04 Top up" style="width:390px;height:844px;border-radius:48px;overflow:hidden;background:#FBF7EF;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column">
+<div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-weight:700;font-size:15px"><span>9:41</span><span style="width:24px;height:11px;border-radius:4px;border:2px solid #201e1d;box-sizing:border-box;padding:1px"><span style="display:block;width:70%;height:100%;background:#201e1d;border-radius:1px"></span></span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:4px 16px 12px">
+<div style="width:30px;height:28px;background:#E9B213;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)"></div>
+<div style="font-family:var(--font-heading);font-size:19px;color:#1F2348">NimCFA</div>
+<sc-if value="{{ showTestnet }}" hint-placeholder-val="{{ true }}"><div style="font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#E9B213"></span>Testnet demo</div></sc-if>
+<div style="flex:1"></div>
+<div style="display:flex;padding:3px;border-radius:999px;background:#EDEEF5;font-size:11px;font-weight:700"><span style="padding:4px 9px;border-radius:999px;background:#1F2348;color:#fff">EN</span><span style="padding:4px 9px;color:#1F2348">FR</span></div>
+<div style="width:32px;height:32px;border-radius:50%;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></div>
+</div>
+<div style="flex:1;padding:2px 18px 22px;display:flex;flex-direction:column;gap:14px">
+<div style="display:grid;grid-template-columns:1fr 1fr;padding:5px;border-radius:999px;background:#EDEEF5;font-weight:700;font-size:15px;text-align:center"><span style="padding:11px;color:#1F2348">Cash out</span><span style="padding:11px;border-radius:999px;background:#1F2348;color:#fff">Top up</span></div>
+<div style="background:#fff;border-radius:32px;padding:20px 22px;box-shadow:var(--shadow-md);display:flex;flex-direction:column;gap:12px">
+<span style="font-size:14px;font-weight:600;color:#55597a">You pay</span>
+<div style="display:flex;align-items:baseline;gap:8px"><span style="flex:1;font-family:var(--font-heading);font-size:54px;line-height:1.05;color:#1F2348">10,000</span><span style="font-weight:800;font-size:18px;color:#1F2348">FCFA</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;background:#FCF1CF;border-radius:20px;padding:12px 16px"><span style="font-size:14px;font-weight:600;color:#5b4a12">You get</span><span style="font-family:var(--font-heading);font-size:22px;color:#1F2348">15,887 <span style="font-family:var(--font-body);font-weight:800;font-size:13px;color:#7a5d07">NIM</span></span></div>
+<span style="font-size:13px;color:#6b6e86">Fee 1.5% (150 FCFA) included · 1 NIM = 0.62 FCFA</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<span style="font-size:14px;font-weight:600;color:#55597a;padding-left:6px">Pay from</span>
+<div style="display:flex;align-items:center;gap:10px;background:#fff;border-radius:999px;padding:8px 8px 8px 18px;box-shadow:var(--shadow-sm)"><span style="font-weight:700;color:#55597a">+237</span><span style="flex:1;font-weight:700;font-size:18px;letter-spacing:.02em;padding:6px 0">699 88 77 66</span><span style="display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:#FF7900;color:#fff;font-weight:800;font-size:13px"><span style="width:8px;height:8px;border-radius:2px;background:#fff"></span>Orange Money</span></div>
+</div>
+<div style="flex:1;display:flex;align-items:center;justify-content:center">
+<div style="width:190px;height:190px;border-radius:50%"><image-slot id="topup-illus" shape="circle" placeholder="Illustration: phone & coins" style="width:190px;height:190px"></image-slot></div>
+</div>
+<div style="align-self:center;display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;background:#e5ead9;color:#3b4529;font-weight:700;font-size:14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>Rate locked for {{ clock }}</div>
+<button style="border:0;cursor:pointer;height:60px;border-radius:999px;background:#E9B213;color:#1F2348;font-family:var(--font-heading);font-size:22px;box-shadow:0 10px 22px rgba(233,178,19,.4)" style-hover="background:#f2c33a" style-active="background:#cf9e10">Top up</button>
+</div>
+</div>
+</div>
+
+<!-- 4b USSD -->
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-weight:700;font-size:15px;color:#1F2348">4 · Approve USSD</div>
+<div data-screen-label="04 USSD" style="width:390px;height:844px;border-radius:48px;overflow:hidden;background:#FBF7EF;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column">
+<div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-weight:700;font-size:15px"><span>9:41</span><span style="width:24px;height:11px;border-radius:4px;border:2px solid #201e1d;box-sizing:border-box;padding:1px"><span style="display:block;width:70%;height:100%;background:#201e1d;border-radius:1px"></span></span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:4px 16px 12px">
+<div style="width:30px;height:28px;background:#E9B213;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)"></div>
+<div style="font-family:var(--font-heading);font-size:19px;color:#1F2348">NimCFA</div>
+<sc-if value="{{ showTestnet }}" hint-placeholder-val="{{ true }}"><div style="font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#E9B213"></span>Testnet demo</div></sc-if>
+<div style="flex:1"></div>
+<div style="display:flex;padding:3px;border-radius:999px;background:#EDEEF5;font-size:11px;font-weight:700"><span style="padding:4px 9px;border-radius:999px;background:#1F2348;color:#fff">EN</span><span style="padding:4px 9px;color:#1F2348">FR</span></div>
+<div style="width:32px;height:32px;border-radius:50%;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></div>
+</div>
+<div style="flex:1;padding:12px 22px 24px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<span style="font-size:13px;font-weight:800;color:#9a5400;letter-spacing:.06em;text-transform:uppercase">Step 2 of 3</span>
+<span style="font-family:var(--font-heading);font-size:30px;color:#1F2348;line-height:1.15">Approve the USSD prompt on your phone</span>
+<span style="font-size:15px;line-height:1.45;color:#55597a">Enter your Orange Money PIN to pay 10,000 FCFA.</span>
+</div>
+<div style="position:relative;align-self:center;width:240px;border-radius:40px;background:#FF7900;padding:34px 18px 26px;box-shadow:0 18px 40px rgba(255,121,0,.3)">
+<sc-if value="{{ showPattern }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;inset:0;border-radius:40px;opacity:.18;background-image:repeating-linear-gradient(45deg,transparent 0 10px,#fff 10px 12px),repeating-linear-gradient(-45deg,transparent 0 10px,#fff 10px 12px)"></div></sc-if>
+<div style="position:relative;background:#fff;border-radius:22px;padding:18px 16px;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.45;box-shadow:var(--shadow-md)">
+<span style="font-weight:700">Orange Money</span>
+<span>Pay 10,000 FCFA to NimCFA. Enter your PIN to confirm.</span>
+<div style="height:38px;border-radius:12px;background:#f2f2f4;display:flex;align-items:center;padding:0 12px;letter-spacing:.4em;font-weight:800;color:#888">••••</div>
+<div style="display:flex;justify-content:space-between;font-weight:800;color:#FF7900;font-size:13px;padding:0 4px"><span>CANCEL</span><span>SEND</span></div>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;justify-content:center;color:#1F2348;font-weight:700;font-size:15px"><span style="width:22px;height:22px;border-radius:50%;box-sizing:border-box;border:3px solid #E9B213;border-right-color:#FCF1CF"></span>Waiting for your approval…</div>
+<div style="flex:1"></div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#fff;border-radius:24px;padding:16px 18px;box-shadow:var(--shadow-sm);font-size:14px">
+<div style="display:flex;justify-content:space-between"><span style="color:#55597a">No prompt?</span><span style="font-weight:700;color:#1F2348">Dial #150*50#</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#55597a">Rate locked for</span><span style="font-weight:700;color:#3b4529">{{ clock }}</span></div>
+</div>
+<button style="border:0;cursor:pointer;height:48px;border-radius:999px;background:#EDEEF5;color:#1F2348;font-weight:700;font-size:15px" style-hover="background:#dfe1ec">Cancel top up</button>
+</div>
+</div>
+</div>
+
+<!-- 4c NIM DELIVERED -->
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-weight:700;font-size:15px;color:#1F2348">4 · NIM delivered</div>
+<div data-screen-label="04 Delivered" style="width:390px;height:844px;border-radius:48px;overflow:hidden;background:#FBF7EF;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column">
+<div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-weight:700;font-size:15px"><span>9:41</span><span style="width:24px;height:11px;border-radius:4px;border:2px solid #201e1d;box-sizing:border-box;padding:1px"><span style="display:block;width:70%;height:100%;background:#201e1d;border-radius:1px"></span></span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:4px 16px 12px">
+<div style="width:30px;height:28px;background:#E9B213;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)"></div>
+<div style="font-family:var(--font-heading);font-size:19px;color:#1F2348">NimCFA</div>
+<sc-if value="{{ showTestnet }}" hint-placeholder-val="{{ true }}"><div style="font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#E9B213"></span>Testnet demo</div></sc-if>
+<div style="flex:1"></div>
+<div style="display:flex;padding:3px;border-radius:999px;background:#EDEEF5;font-size:11px;font-weight:700"><span style="padding:4px 9px;border-radius:999px;background:#1F2348;color:#fff">EN</span><span style="padding:4px 9px;color:#1F2348">FR</span></div>
+<div style="width:32px;height:32px;border-radius:50%;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></div>
+</div>
+<div style="flex:1;padding:8px 18px 24px;display:flex;flex-direction:column;gap:20px">
+<div style="position:relative;overflow:hidden;border-radius:36px;background:#1F2348;color:#fff;padding:34px 24px 28px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center">
+<sc-if value="{{ showPattern }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:-40px;bottom:-70px;width:220px;height:220px;border-radius:50%;opacity:.35;background-image:repeating-linear-gradient(45deg,transparent 0 10px,#E9B213 10px 12px),repeating-linear-gradient(-45deg,transparent 0 10px,#E9B213 10px 12px)"></div></sc-if>
+<div style="position:relative;width:110px;height:100px;background:#E9B213;color:#1F2348;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%);display:flex;align-items:center;justify-content:center"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<span style="position:relative;font-size:15px;font-weight:700;color:#E9B213">NIM delivered</span>
+<div style="position:relative;display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--font-heading);font-size:50px;line-height:1.05">+15,887</span><span style="font-weight:800;font-size:18px;color:#E9B213">NIM</span></div>
+<span style="position:relative;font-size:15px;opacity:.85">Now in your Nimiq Pay wallet</span>
+</div>
+<div style="background:#fff;border-radius:28px;padding:18px 20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px;font-size:15px">
+<div style="display:flex;justify-content:space-between"><span style="color:#55597a">Paid</span><span style="font-weight:700">10,000 FCFA</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="color:#55597a">From</span><span style="display:flex;align-items:center;gap:8px;font-weight:700"><span style="width:10px;height:10px;border-radius:3px;background:#FF7900"></span>699 88 77 66</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#55597a">Fee (1.5%)</span><span style="font-weight:700">150 FCFA</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#55597a">New balance</span><span style="font-weight:700;color:#1F2348">64,137 NIM</span></div>
+</div>
+<div style="flex:1"></div>
+<button style="border:0;cursor:pointer;height:60px;border-radius:999px;background:#E9B213;color:#1F2348;font-family:var(--font-heading);font-size:21px;box-shadow:0 10px 22px rgba(233,178,19,.4)" style-hover="background:#f2c33a" style-active="background:#cf9e10">Done</button>
+</div>
+</div>
+</div>
+
+<!-- 5 REFUND -->
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-weight:700;font-size:15px;color:#1F2348">5 · Payout rejected, refunded</div>
+<div data-screen-label="05 Refund" style="width:390px;height:844px;border-radius:48px;overflow:hidden;background:#FBF7EF;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column">
+<div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-weight:700;font-size:15px"><span>9:41</span><span style="width:24px;height:11px;border-radius:4px;border:2px solid #201e1d;box-sizing:border-box;padding:1px"><span style="display:block;width:70%;height:100%;background:#201e1d;border-radius:1px"></span></span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:4px 16px 12px">
+<div style="width:30px;height:28px;background:#E9B213;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)"></div>
+<div style="font-family:var(--font-heading);font-size:19px;color:#1F2348">NimCFA</div>
+<sc-if value="{{ showTestnet }}" hint-placeholder-val="{{ true }}"><div style="font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#E9B213"></span>Testnet demo</div></sc-if>
+<div style="flex:1"></div>
+<div style="display:flex;padding:3px;border-radius:999px;background:#EDEEF5;font-size:11px;font-weight:700"><span style="padding:4px 9px;border-radius:999px;background:#1F2348;color:#fff">EN</span><span style="padding:4px 9px;color:#1F2348">FR</span></div>
+<div style="width:32px;height:32px;border-radius:50%;background:#EDEEF5;color:#1F2348;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></div>
+</div>
+<div style="flex:1;padding:24px 22px 24px;display:flex;flex-direction:column;gap:22px">
+<div style="align-self:flex-start;position:relative;width:120px;height:120px">
+<div style="position:absolute;inset:0;border-radius:50%;background:#e5ead9"></div>
+<div style="position:absolute;inset:18px;border-radius:50%;background:#7a8a5e;color:#fff;display:flex;align-items:center;justify-content:center"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<span style="font-family:var(--font-heading);font-size:30px;color:#1F2348;line-height:1.15">Payout rejected, your NIM was refunded</span>
+<span style="font-size:16px;line-height:1.5;color:#3d3a36;text-wrap:pretty">MTN MoMo could not credit 677 12 34 56. Nothing was lost: the full amount is back in your wallet.</span>
+</div>
+<div style="background:#fff;border-radius:28px;padding:18px 20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px;font-size:15px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:#55597a">Refunded</span><span style="font-family:var(--font-heading);font-size:22px;color:#4f5c39">16,371 <span style="font-family:var(--font-body);font-weight:800;font-size:13px">NIM</span></span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#55597a">Reason</span><span style="font-weight:700">Wallet limit reached</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#55597a">Reference</span><span style="font-weight:700">NCF-8K2Q-41</span></div>
+</div>
+<div style="display:flex;gap:12px;align-items:center;background:#EDEEF5;border-radius:24px;padding:14px 16px;color:#1F2348"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"></rect><path d="M12 18h.01"></path></svg><span style="font-size:14px;line-height:1.4;font-weight:600">Try a smaller amount or another number.</span></div>
+<div style="flex:1"></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<button style="border:0;cursor:pointer;height:60px;border-radius:999px;background:#1F2348;color:#fff;font-family:var(--font-heading);font-size:21px" style-hover="background:#2c3163">Try again</button>
+<button style="border:0;cursor:pointer;height:48px;border-radius:999px;background:transparent;color:#1F2348;font-weight:700;font-size:15px" style-hover="background:#EDEEF5">Back to home</button>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showTestnet&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showPattern&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const RATE = 0.62;
+class Component extends DCLogic {
+  state = { secs: 597, en: { amt: '10000', phone: '677 12 34 56' }, fr: { amt: '25000', phone: '699 88 77 66' } };
+  componentDidMount() { this.t = setInterval(() => this.setState(s => ({ secs: s.secs <= 0 ? 600 : s.secs - 1 })), 1000); }
+  componentWillUnmount() { clearInterval(this.t); }
+  fmt(n, k) { const s = n.toLocaleString('en-US'); return k === 'fr' ? s.replace(/,/g, '\u202F') : s; }
+  op(p) {
+    const d = p.replace(/\D/g, '');
+    if (d.length < 2 || d[0] !== '6') return 'none';
+    if (d[1] === '7') return 'mtn';
+    if (d[1] === '9') return 'orange';
+    if ((d[1] === '5' || d[1] === '8') && d.length >= 3) return +d[2] <= 4 ? 'mtn' : 'orange';
+    return 'none';
+  }
+  form(k) {
+    const d = this.state[k];
+    const n = parseInt(d.amt, 10) || 0;
+    const fee = Math.round(n * 0.015);
+    const op = this.op(d.phone);
+    const set = patch => this.setState(s => ({ [k]: { ...s[k], ...patch } }));
+    return {
+      amtText: n ? this.fmt(n, k) : '',
+      fee: this.fmt(fee, k),
+      nim: this.fmt(Math.ceil((n + fee) / RATE), k),
+      phone: d.phone,
+      isMtn: op === 'mtn', isOrange: op === 'orange', isNone: op === 'none',
+      onAmt: e => set({ amt: e.target.value.replace(/\D/g, '').slice(0, 7) }),
+      onPhone: e => set({ phone: e.target.value.replace(/[^\d ]/g, '').slice(0, 12) }),
+      q5: () => set({ amt: '5000' }), q10: () => set({ amt: '10000' }), q25: () => set({ amt: '25000' }),
+    };
+  }
+  renderVals() {
+    const s = this.state.secs;
+    return {
+      clock: String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'),
+      en: this.form('en'), fr: this.form('fr'),
+      showTestnet: this.props.showTestnet ?? true,
+      showPattern: this.props.showPattern ?? true,
+    };
+  }
+}
+</script>
+</body>
+</html>

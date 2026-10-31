@@ -13,6 +13,11 @@ export interface Wallet {
 
 export class UserCancelled extends Error {}
 
+/** How the browser preview wallet asks the user to approve a send. The app swaps in its own sheet. */
+type PreviewConfirm = (tx: { recipient: string, value: number, data: string }) => Promise<boolean>
+let previewConfirm: PreviewConfirm = async tx => window.confirm(`Preview wallet (testnet)\n\nSend ${tx.value / 1e5} NIM to\n${tx.recipient}\nMemo: ${tx.data}`)
+export function setPreviewConfirm(fn: PreviewConfirm) { previewConfirm = fn }
+
 function isCancel(e: unknown) {
   if (NimiqProviderError.is(e)) return /denied|reject|cancel/i.test(`${e.message} ${(e as { code?: string }).code ?? ''}`)
   return /denied|reject|cancel/i.test(String((e as Error)?.message ?? e))
@@ -47,7 +52,7 @@ export async function connectWallet(): Promise<Wallet | null> {
       listAccounts: async () => [(await (await call('/api/dev/wallet')).json()).address],
       getBalance: async () => (await (await call('/api/dev/wallet')).json()).balance,
       async send(tx) {
-        if (!window.confirm(`Preview wallet (testnet)\n\nSend ${tx.value / 1e5} NIM to\n${tx.recipient}\nMemo: ${tx.data}`)) throw new UserCancelled('cancelled')
+        if (!await previewConfirm(tx)) throw new UserCancelled('cancelled')
         const r = await call('/api/dev/send', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(tx) })
         if (!r.ok) throw new Error('Preview wallet could not send')
         return (await r.json()).hash
