@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#1f2348"/>
+  <path d="M256 70l161 93v186l-161 93-161-93V163z" fill="#e9b213"/>
+  <text x="256" y="236" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="800" font-size="96" fill="#1f2348">NIM</text>
+  <text x="256" y="300" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="800" font-size="56" fill="#1f2348">⇅</text>
+  <text x="256" y="372" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="800" font-size="84" fill="#1f2348">CFA</text>
+</svg>
