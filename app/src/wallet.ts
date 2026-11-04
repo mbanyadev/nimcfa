@@ -65,3 +65,34 @@ export function hostLanguage(): 'fr' | 'en' {
   const l = getHostLanguage() ?? navigator.language
   return l?.toLowerCase().startsWith('fr') ? 'fr' : 'en'
 }
+
+const RPC: Record<'mainnet' | 'testnet', string> = {
+  mainnet: 'https://rpc.nimiqwatch.com',
+  testnet: 'https://rpc.testnet.nimiqwatch.com/',
+}
+/** Balance (luna) of an address on a given network, read straight from a public RPC node. */
+export async function chainBalance(network: 'mainnet' | 'testnet', address: string): Promise<number | null> {
+  try {
+    const r = await fetch(RPC[network], {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'getAccountByAddress', params: [address] }),
+    })
+    const j = await r.json() as { result?: { data?: { balance?: number } } }
+    const b = j.result?.data?.balance
+    return typeof b === 'number' ? b : null
+  }
+  catch { return null }
+}
+
+/**
+ * The balance that matters to NimCFA: the one on the service's network. Nimiq Pay reports the balance on its own
+ * network, so when Pay is on mainnet and the service on testnet we read the testnet balance from RPC directly.
+ */
+export async function serviceBalance(wallet: Wallet, address: string, network?: 'mainnet' | 'testnet'): Promise<number | null> {
+  if (wallet.mode === 'nimiqpay' && network) {
+    const b = await chainBalance(network, address)
+    if (b !== null) return b
+    if (wallet.network !== network) return null
+  }
+  return wallet.getBalance(address)
+}

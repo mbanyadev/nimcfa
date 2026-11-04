@@ -310,3 +310,4 @@ small { display: block; font-size: 13px; }
 .banner-acts { display: flex; gap: 12px; flex: none; }
 .btn-back { align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; background: none; border: 0; padding: 4px 0; font-weight: 700; color: var(--navy); cursor: pointer; }
 .demo-tip { display: block; margin-top: 4px; }
+.tile:disabled, .btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }

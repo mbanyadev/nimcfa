@@ -3,12 +3,40 @@ import { api, DEMO, type Health, type Order, type Quote } from './api'
 import { dicts, localizeError, fmtInt, fmtNim, fmtRate, fmtXaf, type Dict, type Lang } from './i18n'
 import { Hex, Icon, MomoArt } from './icons'
 import { normalize, operatorOf } from './phone'
-import { connectWallet, hostLanguage, setPreviewConfirm, UserCancelled, type Wallet } from './wallet'
+import { connectWallet, hostLanguage, serviceBalance, setPreviewConfirm, UserCancelled, type Wallet } from './wallet'
 
 type Kind = 'offramp' | 'onramp'
 type View = { name: 'home' } | { name: 'ramp', kind: Kind }
 type PendingTx = { tx: { recipient: string, value: number, data: string }, resolve: (ok: boolean) => void }
 const FINAL = new Set(['paid', 'refunded', 'expired', 'payout_failed', 'delivered', 'payment_failed'])
+/**
+ * Session kept across reloads: inside Nimiq Pay an explorer link can replace the mini app page, and Back then
+ * reloads it. sessionStorage covers a same-tab reload; localStorage covers hosts that start a fresh tab.
+ */
+const SESSION_KEY = 'nimcfa.session'
+type Session = { address: string, view: View, activeId?: string, at: number }
+const SESSION_TTL = 6 * 3600e3
+function loadSession(): Session | null {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY) ?? localStorage.getItem(SESSION_KEY)
+    const s = raw ? JSON.parse(raw) as Session : null
+    return s && Date.now() - s.at < SESSION_TTL ? s : null
+  }
+  catch { return null }
+}
+function saveSession(s: Omit<Session, 'at'> | null) {
+  try {
+    if (!s) { sessionStorage.removeItem(SESSION_KEY); localStorage.removeItem(SESSION_KEY); return }
+    const v = JSON.stringify({ ...s, at: Date.now() })
+    sessionStorage.setItem(SESSION_KEY, v); localStorage.setItem(SESSION_KEY, v)
+  }
+  catch { /* storage unavailable */ }
+}
+/** Open an explorer link outside the mini app when the host allows a new window; the session is saved either way. */
+function openExternal(e: React.MouseEvent<HTMLAnchorElement>) {
+  const w = window.open(e.currentTarget.href, '_blank', 'noopener,noreferrer')
+  if (w !== null) e.preventDefault()
+}
 const opName = (op: string) => op === 'mtn' ? 'MTN MoMo' : 'Orange Money'
 
 /** Re-render every second (rate-lock countdowns). */
@@ -53,9 +81,32 @@ export default function App() {
     connectWallet().then(setWallet)
   }, [])
 
+  const net = health?.network
   const refreshBalance = useCallback(async () => {
-    if (wallet && address) setBalance(await wallet.getBalance(address))
-  }, [wallet, address])
+    if (wallet && address) setBalance(await serviceBalance(wallet, address, net))
+  }, [wallet, address, net])
+  useEffect(() => { refreshBalance() }, [refreshBalance])
+
+  // Restore a saved session (address, screen, open order) once the wallet is back.
+  const restored = useRef(false)
+  useEffect(() => {
+    if (!wallet || restored.current) return
+    restored.current = true
+    const s = loadSession()
+    if (!s) return
+    wallet.listAccounts().then(async ([a]) => {
+      if (!a || a !== s.address) return
+      setAddress(a)
+      if (s.activeId) {
+        try { setActive(await api.order(s.activeId)); return } catch { /* order gone: fall back to the saved view */ }
+      }
+      setView(s.view)
+    }).catch(() => {})
+  }, [wallet])
+  useEffect(() => {
+    if (!restored.current) return
+    saveSession(address ? { address, view, activeId: active?.id } : null)
+  }, [address, view, active])
 
   async function connect() {
     if (!wallet) return
@@ -63,14 +114,14 @@ export default function App() {
     try {
       const [a] = await wallet.listAccounts()
       setAddress(a ?? null)
-      if (a) setBalance(await wallet.getBalance(a))
+      if (a) setBalance(await serviceBalance(wallet, a, health?.network))
     }
     catch (e) { setErr((e as Error).message) }
   }
 
   function retryWallet() { setWallet(undefined); setErr(null); connectWallet().then(setWallet) }
   const goHome = () => { setActive(null); setView({ name: 'home' }); setHistoryKey(k => k + 1); refreshBalance() }
-  const networkMismatch = wallet && health && wallet.network !== health.network
+  const networkMismatch = !!(wallet && health && wallet.network !== health.network)
   const testnet = (health?.network ?? wallet?.network) === 'testnet'
   const connected = wallet && address
   const showClose = connected && (active || view.name !== 'home')
@@ -96,7 +147,7 @@ export default function App() {
       {!connected && <Welcome t={t} wallet={wallet} onConnect={connect} sandbox={!!health?.sandbox} onRetry={retryWallet} />}
 
       {connected && !active && view.name === 'home' && (
-        <Home t={t} health={health} balance={balance} address={address} historyKey={historyKey}
+        <Home t={t} health={health} balance={balance} address={address} historyKey={historyKey} blocked={networkMismatch}
           onRamp={kind => setView({ name: 'ramp', kind })} onOpen={setActive} />
       )}
       {connected && !active && view.name === 'ramp' && !health && (
@@ -104,7 +155,7 @@ export default function App() {
       )}
       {connected && !active && view.name === 'ramp' && health && (
         <RampForm key={view.kind} kind={view.kind} t={t} health={health} wallet={wallet} address={address}
-          balance={balance} onKind={kind => setView({ name: 'ramp', kind })}
+          balance={balance} blocked={networkMismatch} onKind={kind => setView({ name: 'ramp', kind })}
           onStarted={o => { setActive(o); refreshBalance() }} onBack={goHome} />
       )}
       {connected && active && (
@@ -150,8 +201,8 @@ function Welcome({ t, wallet, onConnect, sandbox, onRetry }: { t: Dict, wallet: 
   )
 }
 
-function Home({ t, health, balance, address, historyKey, onRamp, onOpen }: {
-  t: Dict, health: Health | null, balance: number | null, address: string, historyKey: number,
+function Home({ t, health, balance, address, historyKey, blocked, onRamp, onOpen }: {
+  t: Dict, health: Health | null, balance: number | null, address: string, historyKey: number, blocked: boolean,
   onRamp: (k: Kind) => void, onOpen: (o: Order) => void
 }) {
   const rate = health?.xafPerNim ?? null
@@ -165,12 +216,13 @@ function Home({ t, health, balance, address, historyKey, onRamp, onOpen }: {
         <span className="addr" title={address}>{address.slice(0, 9)}…{address.slice(-4)}</span>
         {rate && <span className="pill-glass">{fmtRate(rate, t.locale)}</span>}
       </section>
+      {blocked && <div className="note bad" role="alert">{t.netBlocked}</div>}
       <div className="tiles">
-        <button className="tile gold" onClick={() => onRamp('offramp')}>
+        <button className="tile gold" disabled={blocked} onClick={() => onRamp('offramp')}>
           <span className="tile-ic"><Icon name="out" /></span>
           <span className="tile-tx"><b>{t.cashOut}</b><small>{t.cashOutSub}</small></span>
         </button>
-        <button className="tile" onClick={() => onRamp('onramp')}>
+        <button className="tile" disabled={blocked} onClick={() => onRamp('onramp')}>
           <span className="tile-ic"><Icon name="in" /></span>
           <span className="tile-tx"><b>{t.topUp}</b><small>{t.topUpSub}</small></span>
         </button>
@@ -226,9 +278,9 @@ function History({ t, address, onOpen, refresh }: { t: Dict, address: string, on
   )
 }
 
-function RampForm({ kind, t, health, wallet, address, balance, onStarted, onKind, onBack }: {
+function RampForm({ kind, t, health, wallet, address, balance, blocked, onStarted, onKind, onBack }: {
   kind: Kind, t: Dict, health: Health, wallet: Wallet, address: string,
-  balance: number | null, onStarted: (o: Order) => void, onKind: (k: Kind) => void, onBack: () => void
+  balance: number | null, blocked: boolean, onStarted: (o: Order) => void, onKind: (k: Kind) => void, onBack: () => void
 }) {
   const [xafText, setXafText] = useState(kind === 'offramp' ? '2000' : '5000')
   const [phoneText, setPhoneText] = useState('')
@@ -257,7 +309,7 @@ function RampForm({ kind, t, health, wallet, address, balance, onStarted, onKind
   const feePct = quote ? ((quote.feeXaf / (kind === 'offramp' ? quote.xaf + quote.feeXaf : quote.xaf)) * 100).toFixed(1).replace(/\.0$/, '') : ''
 
   async function submit() {
-    if (!phone || !op || !amountOk) return
+    if (blocked || !phone || !op || !amountOk) return
     setBusy(true); setMsg(null)
     try {
       if (kind === 'offramp') {
@@ -337,10 +389,11 @@ function RampForm({ kind, t, health, wallet, address, balance, onStarted, onKind
 
       {kind === 'onramp' ? <div className="art-slot"><MomoArt size={190} bg="#FCF1CF" /></div> : <div className="grow" />}
 
-      {insufficient && <div className="note bad">{t.notEnough}</div>}
+      {blocked && <div className="note bad" role="alert">{t.netBlocked}</div>}
+      {insufficient && !blocked && <div className="note bad">{t.notEnough}</div>}
       {msg && <div className={`note ${msg.bad ? 'bad' : ''}`}>{msg.text}</div>}
       {quote && left > 0 && <div className="lock"><Icon name="clock" size={16} />{t.lockedFor} {clock(left)}</div>}
-      <button className="btn gold primary" disabled={busy || !quote || !op || !!insufficient} onClick={submit}>
+      <button className="btn gold primary" disabled={blocked || busy || !quote || !op || !!insufficient} onClick={submit}>
         {busy ? <span className="spin dark" /> : kind === 'offramp' ? (quote ? t.confirmSend(fmtNim(quote.nimLuna, t.locale)) : t.cashOut) : t.pay}
       </button>
     </main>
@@ -399,7 +452,7 @@ function Details({ t, o }: { t: Dict, o: Order }) {
           {o.timeline.map((e, i) => (
             <li key={i}>
               <span>{e.label}</span>
-              {txLink(o, e.ref) ? <a href={txLink(o, e.ref)} target="_blank" rel="noreferrer">tx ↗</a> : e.ref ? <code>{e.ref}</code> : null}
+              {txLink(o, e.ref) ? <a href={txLink(o, e.ref)} target="_blank" rel="noreferrer" onClick={openExternal}>tx ↗</a> : e.ref ? <code>{e.ref}</code> : null}
             </li>
           ))}
         </ol>
@@ -432,7 +485,7 @@ function Progress({ t, o, onHome }: { t: Dict, o: Order, onHome: () => void }) {
         return [
           { state: 'done', title: t.stepQuote, sub: `${hm(o.createdAt, t.locale)} · ${rate}` },
           sent
-            ? { state: 'done', title: t.stepNimSent, sub: <>{at ? `${hm(at, t.locale)} · ` : ''}{link ? <a href={link} target="_blank" rel="noreferrer">{t.viewTx}</a> : t.status[o.status]}</> }
+            ? { state: 'done', title: t.stepNimSent, sub: <>{at ? `${hm(at, t.locale)} · ` : ''}{link ? <a href={link} target="_blank" rel="noreferrer" onClick={openExternal}>{t.viewTx}</a> : t.status[o.status]}</> }
             : { state: 'active', title: t.stepWaitNim, sub: t.approveFirst },
           { state: sent ? 'active' : 'todo', title: o.status === 'paying_out' ? t.stepPaying : t.stepPaid, sub: t.usually },
         ]
@@ -561,7 +614,7 @@ function Delivered({ t, o, onHome }: { t: Dict, o: Order, onHome: () => void }) 
         <div><span>{t.paid}</span><b>{fmtXaf(o.xaf, t.locale)}</b></div>
         <div><span>{t.from}</span><b className="from"><i className={o.operator} />{o.phone}</b></div>
         <div><span>{t.fee}</span><b>{fmtXaf(o.feeXaf, t.locale)}</b></div>
-        {txLink(o, o.deliveryTx) && <div><span>{t.transaction}</span><b><a href={txLink(o, o.deliveryTx)} target="_blank" rel="noreferrer">{t.viewTx} ↗</a></b></div>}
+        {txLink(o, o.deliveryTx) && <div><span>{t.transaction}</span><b><a href={txLink(o, o.deliveryTx)} target="_blank" rel="noreferrer" onClick={openExternal}>{t.viewTx} ↗</a></b></div>}
       </section>
       <Details t={t} o={o} />
       <div className="grow" />
