@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { api, DEMO, type Health, type Order, type Quote } from './api'
-import { dicts, fmtInt, fmtNim, fmtRate, fmtXaf, type Dict, type Lang } from './i18n'
+import { dicts, localizeError, fmtInt, fmtNim, fmtRate, fmtXaf, type Dict, type Lang } from './i18n'
 import { Hex, Icon, MomoArt } from './icons'
 import { normalize, operatorOf } from './phone'
 import { connectWallet, hostLanguage, setPreviewConfirm, UserCancelled, type Wallet } from './wallet'
@@ -68,6 +68,7 @@ export default function App() {
     catch (e) { setErr((e as Error).message) }
   }
 
+  function retryWallet() { setWallet(undefined); setErr(null); connectWallet().then(setWallet) }
   const goHome = () => { setActive(null); setView({ name: 'home' }); setHistoryKey(k => k + 1); refreshBalance() }
   const networkMismatch = wallet && health && wallet.network !== health.network
   const testnet = (health?.network ?? wallet?.network) === 'testnet'
@@ -89,31 +90,43 @@ export default function App() {
         {showClose && <button className="icon-btn" aria-label={t.backHome} onClick={goHome}><Icon name="close" size={16} /></button>}
       </header>
 
-      {networkMismatch && <div className="banner warn">Nimiq Pay is on {wallet!.network}, this service runs on {health!.network}.</div>}
+      {(DEMO || health?.sandbox || testnet) && <DemoStrip t={t} />}
+      {networkMismatch && <div className="banner warn">{t.netMismatch(wallet!.network, health!.network)}</div>}
 
-      {!connected && <Welcome t={t} wallet={wallet} onConnect={connect} sandbox={!!health?.sandbox} />}
+      {!connected && <Welcome t={t} wallet={wallet} onConnect={connect} sandbox={!!health?.sandbox} onRetry={retryWallet} />}
 
       {connected && !active && view.name === 'home' && (
         <Home t={t} health={health} balance={balance} address={address} historyKey={historyKey}
           onRamp={kind => setView({ name: 'ramp', kind })} onOpen={setActive} />
       )}
+      {connected && !active && view.name === 'ramp' && !health && (
+        <main className="screen"><div className="waiting"><span className="spin" />{t.connecting}</div><div className="grow" /><button className="btn text" onClick={goHome}>{t.backHome}</button></main>
+      )}
       {connected && !active && view.name === 'ramp' && health && (
         <RampForm key={view.kind} kind={view.kind} t={t} health={health} wallet={wallet} address={address}
           balance={balance} onKind={kind => setView({ name: 'ramp', kind })}
-          onStarted={o => { setActive(o); refreshBalance() }} />
+          onStarted={o => { setActive(o); refreshBalance() }} onBack={goHome} />
       )}
       {connected && active && (
         <OrderView key={active.id} t={t} initial={active} onFinal={refreshBalance} onHome={goHome}
           onRetry={kind => { setActive(null); setView({ name: 'ramp', kind }) }} />
       )}
 
-      {err && <div className="banner warn">{err}</div>}
+      {err && (
+        <div className="banner warn" role="alert">
+          <span>{localizeError(err, t)}</span>
+          <span className="banner-acts">
+            {!health && <button className="link" onClick={() => location.reload()}>{t.reload}</button>}
+            <button className="link" onClick={() => setErr(null)}>{t.dismiss}</button>
+          </span>
+        </div>
+      )}
       {pending && <PreviewSheet t={t} p={pending} onDone={() => setPending(null)} />}
     </div>
   )
 }
 
-function Welcome({ t, wallet, onConnect, sandbox }: { t: Dict, wallet: Wallet | null | undefined, onConnect: () => void, sandbox: boolean }) {
+function Welcome({ t, wallet, onConnect, sandbox, onRetry }: { t: Dict, wallet: Wallet | null | undefined, onConnect: () => void, sandbox: boolean, onRetry: () => void }) {
   return (
     <main className="screen">
       <section className="hero-card welcome">
@@ -130,7 +143,8 @@ function Welcome({ t, wallet, onConnect, sandbox }: { t: Dict, wallet: Wallet | 
       <div className="grow" />
       {(DEMO || sandbox) && <div className="info"><Icon name="shield" /><span>{DEMO ? t.demo : ''} {sandbox ? t.sandbox : ''}</span></div>}
       {wallet === undefined && <div className="waiting"><span className="spin" />{t.connecting}</div>}
-      {wallet === null && <div className="info warn"><Icon name="phone" /><span>{t.notInPay}</span></div>}
+      {wallet === null && <div className="info warn"><Icon name="phone" /><span>{DEMO ? t.notInPayDemo : t.notInPay}</span></div>}
+      {wallet === null && <button className="btn soft" onClick={onRetry}>{t.retry}</button>}
       {wallet && <button className="btn gold" onClick={onConnect}>{t.connect}</button>}
     </main>
   )
@@ -212,9 +226,9 @@ function History({ t, address, onOpen, refresh }: { t: Dict, address: string, on
   )
 }
 
-function RampForm({ kind, t, health, wallet, address, balance, onStarted, onKind }: {
+function RampForm({ kind, t, health, wallet, address, balance, onStarted, onKind, onBack }: {
   kind: Kind, t: Dict, health: Health, wallet: Wallet, address: string,
-  balance: number | null, onStarted: (o: Order) => void, onKind: (k: Kind) => void
+  balance: number | null, onStarted: (o: Order) => void, onKind: (k: Kind) => void, onBack: () => void
 }) {
   const [xafText, setXafText] = useState(kind === 'offramp' ? '2000' : '5000')
   const [phoneText, setPhoneText] = useState('')
@@ -233,7 +247,7 @@ function RampForm({ kind, t, health, wallet, address, balance, onStarted, onKind
   useEffect(() => {
     setQuote(null)
     if (!amountOk) return
-    const h = setTimeout(() => { api.quote(kind, xaf).then(setQuote).catch(e => setMsg({ text: e.message, bad: true })) }, 300)
+    const h = setTimeout(() => { api.quote(kind, xaf).then(q => { setQuote(q); setMsg(m => m?.bad ? null : m) }).catch(e => setMsg({ text: localizeError(e.message, t)!, bad: true })) }, 300)
     return () => clearTimeout(h)
   }, [kind, xaf, amountOk, quoteRound])
   useEffect(() => { if (quote && left <= 0 && !busy) setQuoteRound(r => r + 1) }, [quote, left, busy])
@@ -258,7 +272,7 @@ function RampForm({ kind, t, health, wallet, address, balance, onStarted, onKind
         onStarted(await api.onramp({ xaf, phone, userAddress: address }))
       }
     }
-    catch (e) { setMsg({ text: (e as Error).message, bad: true }) }
+    catch (e) { setMsg({ text: localizeError((e as Error).message, t)!, bad: true }) }
     finally { setBusy(false) }
   }
 
@@ -268,6 +282,7 @@ function RampForm({ kind, t, health, wallet, address, balance, onStarted, onKind
 
   return (
     <main className="screen ramp">
+      <button className="btn-back" onClick={onBack}><Icon name="back" size={16} />{t.back}</button>
       <div className="seg" role="tablist">
         {(['offramp', 'onramp'] as Kind[]).map(k => (
           <button key={k} role="tab" aria-selected={kind === k} className={kind === k ? 'on' : ''} onClick={() => onKind(k)}>
@@ -309,6 +324,7 @@ function RampForm({ kind, t, health, wallet, address, balance, onStarted, onKind
           {opBadge}
         </div>
         {digits.length >= 9 && !op ? <small className="bad">{t.invalidPhone}</small> : !digits.length && <small className="muted">{t.phoneHint}</small>}
+        {(DEMO || health.sandbox) && <small className="muted demo-tip">{t.demoTipFail}</small>}
       </div>
 
       {kind === 'offramp' && (
@@ -442,7 +458,7 @@ function Progress({ t, o, onHome }: { t: Dict, o: Order, onHome: () => void }) {
       <ol className="card steps">
         {steps.map((st, i) => <Step key={i} {...st} last={i === steps.length - 1} next={steps[i + 1]?.state} />)}
       </ol>
-      {o.error && <div className="note">{o.error}</div>}
+      {o.error && <div className="note">{localizeError(o.error, t)}</div>}
       <div className="grow" />
       {off && <div className="info"><Icon name="shield" /><span>{t.refundPromise}</span></div>}
       <button className="btn text" onClick={onHome}>{t.backHome}</button>
@@ -520,6 +536,7 @@ function Ussd({ t, o, onHome }: { t: Dict, o: Order, onHome: () => void }) {
         </div>
       </div>
       <div className="waiting"><span className="spin" />{t.waitingApproval}</div>
+      {(DEMO || o.sandbox) && <div className="info"><Icon name="shield" /><span>{t.demoUssd}</span></div>}
       <div className="grow" />
       <section className="card kv">
         <div><span>{t.noPrompt}</span><b>{t.dial(code)}</b></div>
@@ -565,7 +582,8 @@ function Problem({ t, o, onHome, onRetry }: { t: Dict, o: Order, onHome: () => v
         : s === 'payment_failed'
           ? [t.payFailedTitle, t.payFailedBody(op), 'alert'] as const
           : [t.expiredTitle, t.expiredBody, 'clock'] as const
-  const reason = o.error ? o.error[0].toUpperCase() + o.error.slice(1) : null
+  const loc = o.error ? localizeError(o.error, t, t.locale.startsWith('en') ? o.error : null) : null
+  const reason = loc ? loc[0].toUpperCase() + loc.slice(1) : null
   const refund = s === 'refunded' || s === 'refunding'
   return (
     <main className="screen problem">
@@ -609,6 +627,20 @@ function PreviewSheet({ t, p, onDone }: { t: Dict, p: PendingTx, onDone: () => v
         <button className="btn gold primary" onClick={() => answer(true)}>{t.approve}</button>
         <button className="btn text" onClick={() => answer(false)}>{t.cancel}</button>
       </div>
+    </div>
+  )
+}
+
+function DemoStrip({ t }: { t: Dict }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="demo-strip" role="note">
+      <div className="demo-row">
+        <Icon name="shield" size={16} />
+        <span>{t.demoStrip}</span>
+        <button className="link" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? t.demoLess : t.demoMore}</button>
+      </div>
+      {open && <p>{t.demoExplain} {t.demoTipFail}</p>}
     </div>
   )
 }

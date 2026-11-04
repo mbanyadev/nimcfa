@@ -1,6 +1,7 @@
 /** Stroke icons from the NimCFA design export (24px grid, 2.75 stroke, round caps). */
 const P = {
   close: <path d="M18 6 6 18M6 6l12 12" />,
+  back: <path d="M15 18l-6-6 6-6" />,
   out: <path d="M7 7h10v10M7 17 17 7" />,
   in: <path d="M17 7 7 17M17 17H7V7" />,
   check: <path d="M20 6 9 17l-5-5" />,

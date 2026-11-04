@@ -71,6 +71,22 @@ const en = {
   } as Record<string, string>,
   why: 'NimCFA locks your rate, holds your NIM safely, and refunds you automatically if the payout fails.',
   previewTitle: 'Preview wallet · testnet', previewTo: 'To', previewMemo: 'Memo', approve: 'Approve', cancel: 'Cancel',
+  // demo polish
+  demoStrip: 'Safe demo: test NIM and simulated mobile money. No real money moves.',
+  demoMore: 'How it works', demoLess: 'Hide',
+  demoExplain: 'This demo runs on the Nimiq testnet with free test NIM. MTN and Orange payouts are simulated, so no real francs are sent or taken. Use any Cameroon number (e.g. 670 00 00 00).',
+  demoTipFail: 'Demo tip: numbers ending in 1 or 3 simulate a failed payout, so you can watch the automatic refund.',
+  demoUssd: 'Demo: no real prompt is sent. The simulated operator approves in a few seconds.',
+  retry: 'Retry', dismiss: 'Dismiss', reload: 'Reload',
+  notInPayDemo: 'The demo wallet could not start. Check your connection and retry.',
+  netMismatch: (w: string, s: string) => `Nimiq Pay is on ${w}, but this service runs on ${s}. Switch networks in Nimiq Pay.`,
+  errGeneric: 'Something went wrong. Nothing was sent. Please try again.',
+  errNetwork: 'Could not reach the service. Check your connection and try again.',
+  errPhone: 'Enter a Cameroon mobile number, e.g. 670 00 00 00.',
+  errOperator: 'This number is not an MTN or Orange number.',
+  errAmount: (min: string, max: string) => `Amount must be between ${min} and ${max}.`,
+  errWalletSend: 'The demo wallet could not send. Please try again.',
+  errReview: 'Needs manual review',
 }
 type Dict = typeof en
 const fr: Dict = {
@@ -140,6 +156,22 @@ const fr: Dict = {
   },
   why: 'NimCFA bloque votre taux, garde vos NIM en sécurité et vous rembourse automatiquement si le retrait échoue.',
   previewTitle: 'Portefeuille de test · testnet', previewTo: 'À', previewMemo: 'Mémo', approve: 'Valider', cancel: 'Annuler',
+  cashOutSub: 'NIM → MoMo', topUpSub: 'MoMo → NIM', testnet: 'Testnet',
+  demoStrip: 'Démo sécurisée : NIM de test et Mobile Money simulé. Aucun argent réel ne circule.',
+  demoMore: 'Comment ça marche', demoLess: 'Masquer',
+  demoExplain: 'Cette démo tourne sur le testnet Nimiq avec des NIM de test gratuits. Les paiements MTN et Orange sont simulés : aucun franc réel n’est envoyé ni prélevé. Utilisez n’importe quel numéro camerounais (ex. 670 00 00 00).',
+  demoTipFail: 'Astuce démo : les numéros finissant par 1 ou 3 simulent un échec, pour voir le remboursement automatique.',
+  demoUssd: 'Démo : aucune vraie demande n’est envoyée. L’opérateur simulé valide en quelques secondes.',
+  retry: 'Réessayer', dismiss: 'Fermer', reload: 'Recharger la page',
+  notInPayDemo: 'Le portefeuille de démo n’a pas pu démarrer. Vérifiez votre connexion et réessayez.',
+  netMismatch: (w: string, s: string) => `Nimiq Pay est sur ${w}, mais ce service tourne sur ${s}. Changez de réseau dans Nimiq Pay.`,
+  errGeneric: 'Une erreur est survenue. Rien n’a été envoyé. Veuillez réessayer.',
+  errNetwork: 'Service injoignable. Vérifiez votre connexion et réessayez.',
+  errPhone: 'Entrez un numéro mobile camerounais, ex. 670 00 00 00.',
+  errOperator: 'Ce numéro n’est ni MTN ni Orange.',
+  errAmount: (min: string, max: string) => `Le montant doit être entre ${min} et ${max}.`,
+  errWalletSend: 'Le portefeuille de démo n’a pas pu envoyer. Veuillez réessayer.',
+  errReview: 'Vérification manuelle nécessaire',
 }
 
 /** Whole numbers in the UI language: 10,000 (EN) or 10 000 (FR). */
@@ -150,6 +182,19 @@ export function fmtNim(luna: number, locale = 'en-US', digits = 2) { return (lun
 export function fmtRate(xafPerNim: number, locale = 'en-US') {
   const d = xafPerNim >= 100 ? 0 : xafPerNim >= 1 ? 2 : xafPerNim >= 0.01 ? 4 : 6
   return `1 NIM = ${xafPerNim.toLocaleString(locale, { maximumFractionDigits: d, minimumFractionDigits: Math.min(d, 2) })} FCFA`
+}
+/** Server/engine errors are English; show them in the UI language. Unknown ones get a clear generic message. */
+export function localizeError(msg: string | undefined, t: Dict, fallback: string | null = t.errGeneric): string | null {
+  const m = msg ?? ''
+  if (/failed to fetch|networkerror|load failed|server error \(5/i.test(m)) return t.errNetwork
+  if (/cameroon mobile number/i.test(m)) return t.errPhone
+  if (/not an mtn or orange/i.test(m)) return t.errOperator
+  const a = m.match(/amount must be between (\d+) and (\d+)/i)
+  if (a) return t.errAmount(fmtXaf(+a[1], t.locale), fmtXaf(+a[2], t.locale))
+  if (/preview wallet could not send/i.test(m)) return t.errWalletSend
+  if (/manual review/i.test(m)) return t.errReview
+  if (/^[\x20-\x7e]{1,120}$/.test(m) && t.locale.startsWith('en')) return m
+  return fallback
 }
 export const dicts = { en, fr }
 export type { Dict }

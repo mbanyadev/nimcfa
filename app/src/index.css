@@ -298,3 +298,15 @@ small { display: block; font-size: 13px; }
 .perk-ic.ops i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--mist); }
 .perk-ic.ops i.mtn { background: var(--mtn); margin-right: -4px; }
 .perk-ic.ops i.orange { background: var(--orange); border-radius: 4px; }
+
+/* demo polish */
+.demo-strip { margin: 0 16px 8px; padding: 8px 12px; border-radius: 12px; background: #FCF1CF; color: var(--navy); font-size: 12.5px; line-height: 1.35; border: 1px solid rgba(233, 178, 19, .5); }
+.demo-row { display: flex; align-items: flex-start; gap: 8px; }
+.demo-row > span { flex: 1; font-weight: 600; }
+.demo-row svg { flex: none; margin-top: 1px; }
+.demo-strip p { margin: 6px 0 0 24px; }
+.demo-strip .link, .banner .link { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--navy); text-decoration: underline; cursor: pointer; white-space: nowrap; }
+.banner { display: flex; gap: 10px; align-items: center; justify-content: space-between; }
+.banner-acts { display: flex; gap: 12px; flex: none; }
+.btn-back { align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; background: none; border: 0; padding: 4px 0; font-weight: 700; color: var(--navy); cursor: pointer; }
+.demo-tip { display: block; margin-top: 4px; }
